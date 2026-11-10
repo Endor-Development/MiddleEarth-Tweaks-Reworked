@@ -2,19 +2,19 @@ package metweaks.core;
 
 import java.util.List;
 
-import lotr.client.gui.LOTRGuiButtonOptions;
 import lotr.client.gui.LOTRGuiHiredWarrior;
 import lotr.client.gui.LOTRGuiSlider;
+import lotr.client.gui.button.LOTRGuiButtonOptions;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRHiredNPCInfo.Task;
-import metweaks.guards.NpcReflectionAccess;
 import metweaks.ASMConfig;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
 import metweaks.guards.ExtraHiredData;
 import metweaks.guards.GuardsAdvSettingsConfig;
 import metweaks.guards.HiredInfoAccess;
+import metweaks.guards.NpcReflectionAccess;
 import metweaks.network.HiredAdvInfoPacket;
 import metweaks.network.NetworkHandler;
 import net.minecraft.client.gui.GuiTextField;

@@ -1,11 +1,11 @@
 package metweaks.core;
 
+import java.util.Locale;
+import java.util.Map;
+
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import metweaks.ASMConfig;
-
-import java.util.Locale;
-import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.7.10")
 @IFMLLoadingPlugin.TransformerExclusions({"metweaks.core"})

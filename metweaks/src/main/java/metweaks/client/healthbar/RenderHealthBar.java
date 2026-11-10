@@ -1,5 +1,40 @@
 package metweaks.client.healthbar;
 
+import static metweaks.client.healthbar.HealthBarConfig.attributesAll;
+import static metweaks.client.healthbar.HealthBarConfig.attributesOnlyTamed;
+import static metweaks.client.healthbar.HealthBarConfig.blacklist;
+import static metweaks.client.healthbar.HealthBarConfig.color_background;
+import static metweaks.client.healthbar.HealthBarConfig.color_health;
+import static metweaks.client.healthbar.HealthBarConfig.color_injured;
+import static metweaks.client.healthbar.HealthBarConfig.color_mount;
+import static metweaks.client.healthbar.HealthBarConfig.color_player;
+import static metweaks.client.healthbar.HealthBarConfig.hideOnFellowshipMembers;
+import static metweaks.client.healthbar.HealthBarConfig.hideOnHireds;
+import static metweaks.client.healthbar.HealthBarConfig.hideOnPlayers;
+import static metweaks.client.healthbar.HealthBarConfig.hideOnSpeech;
+import static metweaks.client.healthbar.HealthBarConfig.icon_armor;
+import static metweaks.client.healthbar.HealthBarConfig.icon_armor_meta;
+import static metweaks.client.healthbar.HealthBarConfig.icon_jump;
+import static metweaks.client.healthbar.HealthBarConfig.icon_jump_meta;
+import static metweaks.client.healthbar.HealthBarConfig.icon_speed;
+import static metweaks.client.healthbar.HealthBarConfig.icon_speed_meta;
+import static metweaks.client.healthbar.HealthBarConfig.maxDistanceSq;
+import static metweaks.client.healthbar.HealthBarConfig.offsetY;
+import static metweaks.client.healthbar.HealthBarConfig.onlyHiredOrPlayer;
+import static metweaks.client.healthbar.HealthBarConfig.onlyInjured;
+import static metweaks.client.healthbar.HealthBarConfig.showAll;
+import static metweaks.client.healthbar.HealthBarConfig.showArmor;
+import static metweaks.client.healthbar.HealthBarConfig.showClampSpeed;
+import static metweaks.client.healthbar.HealthBarConfig.showDesc;
+import static metweaks.client.healthbar.HealthBarConfig.showIcons;
+import static metweaks.client.healthbar.HealthBarConfig.showJump;
+import static metweaks.client.healthbar.HealthBarConfig.showMouseover;
+import static metweaks.client.healthbar.HealthBarConfig.showSpeed;
+import static metweaks.client.healthbar.HealthBarConfig.speedAsMeters;
+import static metweaks.events.ClientEvents.nextCanSeeCacheClear;
+import static metweaks.events.ClientEvents.translateJump;
+import static metweaks.events.ClientEvents.translateSpeed;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -12,8 +47,8 @@ import lotr.common.LOTRLevelData;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityNPCRideable;
-import lotr.common.entity.npc.LOTREntityWarg;
 import lotr.common.entity.npc.LOTRNPCMount;
+import lotr.common.entity.npc.base.LOTREntityWarg;
 import lotr.common.fellowship.LOTRFellowshipClient;
 import lotr.common.item.LOTRItemMountArmor;
 import lotr.common.item.LOTRWeaponStats;
@@ -40,9 +75,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-
-import static metweaks.client.healthbar.HealthBarConfig.*;
-import static metweaks.events.ClientEvents.*;
 
 public class RenderHealthBar {
 	

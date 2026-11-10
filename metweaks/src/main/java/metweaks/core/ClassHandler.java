@@ -1,14 +1,48 @@
 package metweaks.core;
 
+import static metweaks.core.TCallsBlocks.transformBlockFenceGate;
+import static metweaks.core.TCallsBlocks.transformBlockRotatedPillar;
+import static metweaks.core.TCallsBlocks.transformBlockSlab;
+import static metweaks.core.TCallsBlocks.transformBlockTrapdoor;
+import static metweaks.core.TCallsBlocks.transformItemCarvableSlab;
+import static metweaks.core.TCallsBlocks.transformItemSlab;
+import static metweaks.core.TCallsBlocks.transformLOTRFABlockMultiWoodBeam;
+import static metweaks.core.TCallsBlocks.transformSubBlocks;
+import static metweaks.core.TCallsConquest.transformFMLHandshakeClientState$WAITINGSERVERCOMPLETE;
+import static metweaks.core.TCallsConquest.transformFMLHandshakeMessage$ModIdData;
+import static metweaks.core.TCallsConquest.transformLOTRBiomeSpawnList$FactionContainer;
+import static metweaks.core.TCallsConquest.transformLOTRConquestGrid;
+import static metweaks.core.TCallsConquest.transformLOTRConquestZone;
+import static metweaks.core.TCallsConquest.transformLOTRLevelData;
+import static metweaks.core.TCallsConquest.transformLOTRReflection;
+import static metweaks.core.TCallsGuards.transformEntityAITarget;
+import static metweaks.core.TCallsGuards.transformHiredInfoAccess;
+import static metweaks.core.TCallsGuards.transformLOTRGuiHiredWarrior;
+import static metweaks.core.TCallsGuards.transformLOTRHiredNPCInfo;
+import static metweaks.core.TCallsGuards.transformLOTRPacketHiredGui;
+import static metweaks.core.TCallsGuards.transformLOTRPacketHiredUnitCommand$Handler;
+import static metweaks.core.TCallsMisc.modifyDraughBlock;
+import static metweaks.core.TCallsMisc.transformEntityPlayer;
+import static metweaks.core.TCallsMisc.transformFMLIndexedMessageToMessageCodec;
+import static metweaks.core.TCallsMisc.transformItemFood;
+import static metweaks.core.TCallsMisc.transformItemHoe;
+import static metweaks.core.TCallsMisc.transformItemShears;
+import static metweaks.core.TCallsMisc.transformLOTREntityAIAttackOnCollide;
+import static metweaks.core.TCallsMisc.transformLOTREventHandler;
+import static metweaks.core.TCallsMisc.transformLOTRItemEntDraught;
+import static metweaks.core.TCallsMisc.transformLOTRItemMug;
+import static metweaks.core.TCallsMisc.transformLOTRTickHandlerClient;
+import static metweaks.core.TCallsMisc.transformRingWriting;
+import static metweaks.core.TCallsRanged.transformLOTRContainerHiredWarriorInventory;
+import static metweaks.core.TCallsRanged.transformLOTREntityAIRangedAttack;
+import static metweaks.core.TCallsRanged.transformLOTREntityTauredainBlowgunner;
+import static metweaks.core.TCallsRanged.transformLOTRGuiHiredWarriorInventory;
+import static metweaks.core.TCallsRanged.transformLOTRInventoryHiredReplacedItems;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
-import static metweaks.core.TCallsRanged.*;
-import static metweaks.core.TCallsConquest.*;
-import static metweaks.core.TCallsBlocks.*;
-import static metweaks.core.TCallsGuards.*;
-import static metweaks.core.TCallsMisc.*;
 
 public class ClassHandler {
 	

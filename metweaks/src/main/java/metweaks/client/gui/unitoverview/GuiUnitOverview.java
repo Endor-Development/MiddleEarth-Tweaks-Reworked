@@ -2,13 +2,14 @@ package metweaks.client.gui.unitoverview;
 
 import java.util.Arrays;
 import java.util.Collections;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import gnu.trove.list.TIntList;
 import gnu.trove.map.TIntObjectMap;
-import lotr.common.LOTRMod;
 import lotr.common.LOTRSquadrons;
+import lotr.common.content.LOTRItems;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHiredNPCInfo.Task;
 import lotr.common.network.LOTRPacketHandler;
@@ -16,8 +17,8 @@ import lotr.common.network.LOTRPacketHiredUnitCommand;
 import lotr.common.network.LOTRPacketHiredUnitInteract;
 import lotr.common.network.LOTRPacketNPCSquadron;
 import metweaks.MeTweaks;
-import metweaks.client.healthbar.HealthBarConfig;
 import metweaks.client.gui.unitoverview.GuiUnitList.Entry;
+import metweaks.client.healthbar.HealthBarConfig;
 import metweaks.events.ClientEvents;
 import metweaks.events.GuardEvents;
 import metweaks.network.GuardsOverviewActionPacket;
@@ -25,9 +26,9 @@ import metweaks.network.GuardsOverviewPacket;
 import metweaks.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -254,7 +255,9 @@ public class GuiUnitOverview extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
-		if(unitInvOpenID == -1) inventories = null;
+		if(unitInvOpenID == -1) {
+			inventories = null;
+		}
 		
 		if(parent != null) {
 			GuardEvents.nextToShow = parent;
@@ -355,6 +358,7 @@ public class GuiUnitOverview extends GuiScreen {
 	
 	public static int unitInvOpenID;
 	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		filtercompany.mouseClicked(mouseX, mouseY, mouseButton);
 		if(col_states[columnCompany] && mouseButton == 0 && !selectionMode) {
@@ -409,8 +413,9 @@ public class GuiUnitOverview extends GuiScreen {
 					 sound = true;
 				 }
 				 
-				 if(sound)
-					 checkboxWarriors.func_146113_a(mc.getSoundHandler());
+				 if(sound) {
+					checkboxWarriors.func_146113_a(mc.getSoundHandler());
+				 }
 				 
 				
 				 
@@ -515,7 +520,9 @@ public class GuiUnitOverview extends GuiScreen {
         int archers = unitsList.archers;
         int total = farmhands + banners + soldiers;
         
-        if(total == 0) return;
+        if(total == 0) {
+			return;
+		}
         
         int iconSize = 12;
         
@@ -589,31 +596,41 @@ public class GuiUnitOverview extends GuiScreen {
         
         
         drawString(fontRendererObj, totalStr, xTotal, y+2, 0xff6ffc03); // green
-        if(anySoldiers)
-        drawString(fontRendererObj, soldiersStr, xSoldiers+iconSize+2, y+2, 0xffffffff);
-        if(anyBanners)
-        drawString(fontRendererObj, bannersStr, xBanners+iconSize+2, y+2, 0xffffffff);
-        if(anyFarmhands)
-        drawString(fontRendererObj, farmhandsStr, xFarmhands+iconSize+2, y+2, 0xffffffff);
-        if(anyRiders)
-        drawString(fontRendererObj, ridersStr, xRiders+iconSize+2, y+2, 0xffffffff);
-        if(anyArchers)
-        drawString(fontRendererObj, archersStr, xArchers+iconSize+2, y+2, 0xffffffff);
+        if(anySoldiers) {
+			drawString(fontRendererObj, soldiersStr, xSoldiers+iconSize+2, y+2, 0xffffffff);
+		}
+        if(anyBanners) {
+			drawString(fontRendererObj, bannersStr, xBanners+iconSize+2, y+2, 0xffffffff);
+		}
+        if(anyFarmhands) {
+			drawString(fontRendererObj, farmhandsStr, xFarmhands+iconSize+2, y+2, 0xffffffff);
+		}
+        if(anyRiders) {
+			drawString(fontRendererObj, ridersStr, xRiders+iconSize+2, y+2, 0xffffffff);
+		}
+        if(anyArchers) {
+			drawString(fontRendererObj, archersStr, xArchers+iconSize+2, y+2, 0xffffffff);
+		}
         
         
         //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         mc.getTextureManager().bindTexture(TextureMap.locationItemsTexture);
-        if(anySoldiers)
-    	drawTexturedModelRectFromIcon(xSoldiers, y, Items.iron_sword.getIconFromDamage(0), iconSize, iconSize);
-        if(anyBanners)
-    	drawTexturedModelRectFromIcon(xBanners, y, LOTRMod.banner.getIconFromDamage(21), iconSize, iconSize);
-        if(anyFarmhands)
-    	drawTexturedModelRectFromIcon(xFarmhands, y, Items.iron_hoe.getIconFromDamage(0), iconSize, iconSize);
-        if(anyRiders)
-    	drawTexturedModelRectFromIcon(xRiders, y, LOTRMod.horseArmorRivendell.getIconFromDamage(0), iconSize, iconSize);
-        if(anyArchers)
-    	drawTexturedModelRectFromIcon(xArchers, y, LOTRMod.ironCrossbow.getIconFromDamage(0), iconSize, iconSize);
-    	//GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        if(anySoldiers) {
+			drawTexturedModelRectFromIcon(xSoldiers, y, Items.iron_sword.getIconFromDamage(0), iconSize, iconSize);
+		}
+        if(anyBanners) {
+			drawTexturedModelRectFromIcon(xBanners, y, LOTRItems.banner.getIconFromDamage(21), iconSize, iconSize);
+		}
+        if(anyFarmhands) {
+			drawTexturedModelRectFromIcon(xFarmhands, y, Items.iron_hoe.getIconFromDamage(0), iconSize, iconSize);
+		}
+        if(anyRiders) {
+			drawTexturedModelRectFromIcon(xRiders, y, LOTRItems.horseArmorRivendell.getIconFromDamage(0), iconSize, iconSize);
+		}
+        if(anyArchers) {
+			drawTexturedModelRectFromIcon(xArchers, y, LOTRItems.ironCrossbow.getIconFromDamage(0), iconSize, iconSize);
+			//GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		}
 	}
 	
 	@Override

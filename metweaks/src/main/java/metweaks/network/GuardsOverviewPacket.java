@@ -13,8 +13,60 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
-import lotr.common.entity.npc.*;
+import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHiredNPCInfo.Task;
+import lotr.common.entity.npc.angmar.LOTREntityAngmarHillmanAxeThrower;
+import lotr.common.entity.npc.angmar.LOTREntityAngmarOrcArcher;
+import lotr.common.entity.npc.angmar.LOTREntityMountainTroll;
+import lotr.common.entity.npc.angmar.LOTREntitySnowTroll;
+import lotr.common.entity.npc.dale.LOTREntityDaleArcher;
+import lotr.common.entity.npc.dolguldur.LOTREntityDolGuldurOrcArcher;
+import lotr.common.entity.npc.dorwinion.LOTREntityDorwinionCrossbower;
+import lotr.common.entity.npc.dorwinion.LOTREntityDorwinionElfArcher;
+import lotr.common.entity.npc.dunedain.LOTREntityRangerNorth;
+import lotr.common.entity.npc.dunedain.LOTREntityRangerNorthBannerBearer;
+import lotr.common.entity.npc.dwarf.LOTREntityBlueDwarfAxeThrower;
+import lotr.common.entity.npc.dwarf.LOTREntityDwarfAxeThrower;
+import lotr.common.entity.npc.easterling.LOTREntityEasterlingArcher;
+import lotr.common.entity.npc.farharad.LOTREntityTauredainBlowgunner;
+import lotr.common.entity.npc.gondor.anorien.LOTREntityAnorienArcher;
+import lotr.common.entity.npc.gondor.blackrootVale.LOTREntityBlackrootArcher;
+import lotr.common.entity.npc.gondor.dolEnErnil.LOTREntityDolAmrothArcher;
+import lotr.common.entity.npc.gondor.ithilien.LOTREntityRangerIthilien;
+import lotr.common.entity.npc.gondor.ithilien.LOTREntityRangerIthilienBannerBearer;
+import lotr.common.entity.npc.gondor.lamedon.LOTREntityLamedonAxeThrower;
+import lotr.common.entity.npc.gondor.lossarnach.LOTREntityLossarnachAxeman;
+import lotr.common.entity.npc.gondor.lossarnach.LOTREntityLossarnachBannerBearer;
+import lotr.common.entity.npc.gundabad.LOTREntityGundabadOrcArcher;
+import lotr.common.entity.npc.gundabad.LOTREntityGundabadUrukArcher;
+import lotr.common.entity.npc.highelf.LOTREntityHighElf;
+import lotr.common.entity.npc.highelf.LOTREntityHighElfBannerBearer;
+import lotr.common.entity.npc.highelf.LOTREntityHighElfWarrior;
+import lotr.common.entity.npc.highelf.LOTREntityRivendellBannerBearer;
+import lotr.common.entity.npc.highelf.LOTREntityRivendellElf;
+import lotr.common.entity.npc.highelf.LOTREntityRivendellWarrior;
+import lotr.common.entity.npc.isengard.LOTREntityDunlendingArcher;
+import lotr.common.entity.npc.isengard.LOTREntityDunlendingAxeThrower;
+import lotr.common.entity.npc.isengard.LOTREntityIsengardSnagaArcher;
+import lotr.common.entity.npc.isengard.LOTREntityUrukHaiCrossbower;
+import lotr.common.entity.npc.mordor.LOTREntityBlackUrukArcher;
+import lotr.common.entity.npc.mordor.LOTREntityMordorOrcArcher;
+import lotr.common.entity.npc.nearharad.LOTREntityGulfHaradArcher;
+import lotr.common.entity.npc.nearharad.LOTREntityHarnedorArcher;
+import lotr.common.entity.npc.nearharad.LOTREntityNearHaradrimArcher;
+import lotr.common.entity.npc.nearharad.LOTREntityNomadArcher;
+import lotr.common.entity.npc.rohan.LOTREntityRohirrimArcher;
+import lotr.common.entity.npc.shire.LOTREntityHobbitBounder;
+import lotr.common.entity.npc.umbar.LOTREntityCorsair;
+import lotr.common.entity.npc.umbar.LOTREntityUmbarArcher;
+import lotr.common.entity.npc.woodelf.LOTREntityGaladhrimBannerBearer;
+import lotr.common.entity.npc.woodelf.LOTREntityGaladhrimElf;
+import lotr.common.entity.npc.woodelf.LOTREntityGaladhrimWarden;
+import lotr.common.entity.npc.woodelf.LOTREntityGaladhrimWarrior;
+import lotr.common.entity.npc.woodelf.LOTREntityWoodElf;
+import lotr.common.entity.npc.woodelf.LOTREntityWoodElfBannerBearer;
+import lotr.common.entity.npc.woodelf.LOTREntityWoodElfScout;
+import lotr.common.entity.npc.woodelf.LOTREntityWoodElfWarrior;
 import lotr.common.inventory.LOTRInventoryNPC;
 import metweaks.ASMConfig;
 import metweaks.client.gui.unitoverview.GuiUnitOverview;
@@ -59,13 +111,13 @@ public class GuardsOverviewPacket implements IMessage {
 		rangedOnly.add(LOTREntityDunlendingAxeThrower.class);
 		rangedOnly.add(LOTREntityDwarfAxeThrower.class);
 		rangedOnly.add(LOTREntityEasterlingArcher.class);
-		rangedOnly.add(LOTREntityGondorArcher.class);
+		rangedOnly.add(LOTREntityAnorienArcher.class);
 		rangedOnly.add(LOTREntityGulfHaradArcher.class);
 		rangedOnly.add(LOTREntityGundabadOrcArcher.class);
 		rangedOnly.add(LOTREntityGundabadUrukArcher.class);
 		rangedOnly.add(LOTREntityHarnedorArcher.class);
 		rangedOnly.add(LOTREntityIsengardSnagaArcher.class);
-		rangedOnly.add(LOTREntityLamedonArcher.class);
+		rangedOnly.add(LOTREntityLamedonAxeThrower.class);
 		rangedOnly.add(LOTREntityMordorOrcArcher.class);
 		rangedOnly.add(LOTREntityTauredainBlowgunner.class);
 		rangedOnly.add(LOTREntityUrukHaiCrossbower.class);
@@ -209,7 +261,8 @@ public class GuardsOverviewPacket implements IMessage {
 	}
 	
 	public static class Handler implements IMessageHandler<GuardsOverviewPacket, IMessage> {
-	    public IMessage onMessage(GuardsOverviewPacket packet, MessageContext context) {
+	    @Override
+		public IMessage onMessage(GuardsOverviewPacket packet, MessageContext context) {
 	    	TIntObjectMap<ItemStack[]> map = packet.inventories;
 	    	if(map.size() == 1 && GuiUnitOverview.inventories != null) {
 	    		int entityID = map.keys()[0];

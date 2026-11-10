@@ -1,13 +1,38 @@
 package metweaks.core;
 
-import static metweaks.ASMConfig.*;
-import net.minecraft.launchwrapper.IClassTransformer;
+import static metweaks.ASMConfig.adventureModePatches;
+import static metweaks.ASMConfig.aiRangedImprovements;
+import static metweaks.ASMConfig.allyConquestSpawns;
+import static metweaks.ASMConfig.allyKillReduceConquest;
+import static metweaks.ASMConfig.barkblocks;
+import static metweaks.ASMConfig.conquestDecay;
+import static metweaks.ASMConfig.draughtStackEffectsIncrease;
+import static metweaks.ASMConfig.fangornTreePenaltyThreshold;
+import static metweaks.ASMConfig.fencegatePlacement;
+import static metweaks.ASMConfig.fixSluggishHaradAttack;
+import static metweaks.ASMConfig.fixTeleportToHiringPlayer;
+import static metweaks.ASMConfig.foodConsumeDurations;
+import static metweaks.ASMConfig.guardsEquipRanged;
+import static metweaks.ASMConfig.guardsSyncSettings;
+import static metweaks.ASMConfig.guardsWanderRange;
+import static metweaks.ASMConfig.horseinv;
+import static metweaks.ASMConfig.improveBlockBreakSpeeds;
+import static metweaks.ASMConfig.lotrHudPositions;
+import static metweaks.ASMConfig.passMissingDiscriminator;
+import static metweaks.ASMConfig.patchDraughtUse;
+import static metweaks.ASMConfig.syncedconfig;
+import static metweaks.ASMConfig.tauredainPoisonDartChance;
+import static metweaks.ASMConfig.trapdoorPlacement;
+import static metweaks.ASMConfig.verticalSlabPlacement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.common.FMLLog;
+import net.minecraft.launchwrapper.IClassTransformer;
 
 public class ClassTransformer implements IClassTransformer {
 	static final String coreprefix = "MT-Core";

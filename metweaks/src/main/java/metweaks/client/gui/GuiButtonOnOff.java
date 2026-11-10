@@ -1,6 +1,6 @@
 package metweaks.client.gui;
 
-import lotr.client.gui.LOTRGuiButtonOptions;
+import lotr.client.gui.button.LOTRGuiButtonOptions;
 
 public class GuiButtonOnOff extends LOTRGuiButtonOptions {
 	

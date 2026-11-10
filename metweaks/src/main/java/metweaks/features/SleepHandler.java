@@ -2,11 +2,11 @@ package metweaks.features;
 
 import java.util.List;
 
-import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.world.LOTRDimension;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
 import net.minecraft.command.IEntitySelector;

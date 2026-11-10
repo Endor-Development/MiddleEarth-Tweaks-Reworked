@@ -1,6 +1,6 @@
 package metweaks.command;
 
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRItems;
 import metweaks.features.ItemUseHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -36,15 +36,17 @@ public class CommandGuardModeHorn extends CommandBase {
 	
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
-		if(!(sender instanceof EntityPlayer)) 
+		if(!(sender instanceof EntityPlayer)) {
 			throw new WrongUsageException(StatCollector.translateToLocal("commands.entitystack.requirePlayer"));
+		}
 		
 		EntityPlayer player = (EntityPlayer) sender;
 		
 		ItemStack stack = player.getHeldItem();		
 
-		if(stack == null || stack.getItem() != LOTRMod.commandHorn) 
+		if(stack == null || stack.getItem() != LOTRItems.commandHorn) {
 			throw new WrongUsageException(StatCollector.translateToLocal("commands.guardmodehorn.requireHorn"));
+		}
 		
 		stack.setItemDamage(ItemUseHandler.TURN_ON_GUARDMODE);
 		stack.setStackDisplayName("\u00a7r"+StatCollector.translateToLocal("gui.guardmodehorn.display")+StatCollector.translateToLocal("options.on"));

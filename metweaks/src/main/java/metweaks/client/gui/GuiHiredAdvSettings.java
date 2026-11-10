@@ -1,8 +1,8 @@
 package metweaks.client.gui;
 
-import lotr.client.gui.LOTRGuiButtonOptions;
 import lotr.client.gui.LOTRGuiHiredNPC;
 import lotr.client.gui.LOTRGuiSlider;
+import lotr.client.gui.button.LOTRGuiButtonOptions;
 import lotr.common.entity.npc.LOTREntityNPC;
 import metweaks.events.ClientEvents;
 import metweaks.events.GuardEvents;

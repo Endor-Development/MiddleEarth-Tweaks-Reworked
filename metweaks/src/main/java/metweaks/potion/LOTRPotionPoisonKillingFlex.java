@@ -2,10 +2,10 @@ package metweaks.potion;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import lotr.common.LOTRDamage;
 import lotr.common.LOTRMod;
-import lotr.common.item.LOTRPoisonedDrinks;
+import lotr.common.content.LOTRDamage;
 import lotr.common.item.LOTRPotionPoisonKilling;
+import lotr.common.item.LOTRPotions;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,7 @@ public class LOTRPotionPoisonKillingFlex extends Potion{
 		setPotionName("potion.lotr.drinkPoison");
 		setIconIndex(0, 0);
 		setEffectiveness(Potion.poison.getEffectiveness());
-		LOTRPoisonedDrinks.killingPoison = this;
+		LOTRPotions.killingPoison = this;
 
 	}
 

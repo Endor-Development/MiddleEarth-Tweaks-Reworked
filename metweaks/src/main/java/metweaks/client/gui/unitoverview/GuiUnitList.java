@@ -1,6 +1,16 @@
 package metweaks.client.gui.unitoverview;
 
-import static metweaks.client.gui.unitoverview.GuiUnitOverview.*;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.col_states;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnArmor;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnCompany;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnDistance;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnIndex;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnInventory;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnLvl;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnName;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.columnType;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.showFarmers;
+import static metweaks.client.gui.unitoverview.GuiUnitOverview.showWarriors;
 
 import java.util.ArrayList;
 import java.util.Arrays;

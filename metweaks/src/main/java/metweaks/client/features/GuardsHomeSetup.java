@@ -1,5 +1,12 @@
 package metweaks.client.features;
 
+import static metweaks.events.GuardEvents.guardHomeEntityID;
+import static metweaks.events.GuardEvents.guardHomePos;
+import static metweaks.events.GuardEvents.guardHomePosTicks;
+import static metweaks.events.GuardEvents.nextInteract;
+
+import org.lwjgl.opengl.GL11;
+
 import lotr.common.entity.npc.LOTREntityNPC;
 import metweaks.events.ClientEvents;
 import metweaks.guards.HiredInfoAccess;
@@ -13,10 +20,6 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-
-import static metweaks.events.GuardEvents.*;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuardsHomeSetup {
 	public static void handleClick(PlayerInteractEvent event) {

@@ -1,21 +1,46 @@
 package metweaks.core;
 
-import static org.objectweb.asm.Opcodes.*;
+import static metweaks.core.ClassTransformer.coreprefix;
+import static metweaks.core.ClassTransformer.log;
+import static metweaks.core.ClassTransformer.obf;
+import static org.objectweb.asm.Opcodes.AALOAD;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ARRAYLENGTH;
+import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.BIPUSH;
+import static org.objectweb.asm.Opcodes.FLOAD;
+import static org.objectweb.asm.Opcodes.F_SAME;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.IADD;
+import static org.objectweb.asm.Opcodes.ICONST_3;
+import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.IF_ICMPLT;
+import static org.objectweb.asm.Opcodes.IF_ICMPNE;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.IOR;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.ISTORE;
+import static org.objectweb.asm.Opcodes.POP;
+import static org.objectweb.asm.Opcodes.RETURN;
 
-import java.io.PrintWriter;
-
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
-
-import static metweaks.core.ClassTransformer.*;
-import static metweaks.core.ClassHandler.*;
-
-import org.objectweb.asm.tree.*;
-import org.objectweb.asm.tree.analysis.Frame;
-import org.objectweb.asm.util.TraceClassVisitor;
-
-import metweaks.ASMConfig;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FrameNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 public class TCallsBlocks {
 	static void transformItemSlab(ClassNode classNode) {
@@ -257,8 +282,9 @@ public class TCallsBlocks {
       					}
       				}
 
-      				if(LOC_end_clone == node)
-      					break;
+      				if(LOC_end_clone == node) {
+						break;
+					}
       			}
       			
       			if(list.size() == 0) {
@@ -319,8 +345,9 @@ public class TCallsBlocks {
 	protected String[] names;
 	
 	public String getBlockName(int meta) {
-		if(meta >= names.length)
+		if(meta >= names.length) {
 			return String.valueOf(meta);
+		}
 		return this.names[meta];
 	}
 	
