@@ -84,16 +84,8 @@ repositories {
     name = "GTNH Maven"
     url = uri("https://nexus.gtnewhorizons.com/repository/public/")
   }
-  
-  exclusiveContent {
-        forRepository {
-            maven {
-                url "https://cursemaven.com"
-            }
-        }
-        filter {
-            includeGroup "curse.maven"
-        }
+  maven {
+    url = uri("https://cursemaven.com")
   }
 	
   flatDir {
