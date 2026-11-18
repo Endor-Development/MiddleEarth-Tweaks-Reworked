@@ -1,7 +1,6 @@
 package metweaks.block;
 
 import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;

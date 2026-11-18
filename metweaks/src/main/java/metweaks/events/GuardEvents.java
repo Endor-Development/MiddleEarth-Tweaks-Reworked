@@ -2,7 +2,6 @@ package metweaks.events;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;

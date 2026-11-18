@@ -1,7 +1,6 @@
 package metweaks.client.features;
 
-import static metweaks.events.GuardEvents.markNpcID;
-import static metweaks.events.GuardEvents.markNpcTicks;
+import static metweaks.events.GuardEvents.*;
 
 import java.nio.FloatBuffer;
 
@@ -9,8 +8,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-import metweaks.client.gui.unitoverview.GuiUnitOverview;
 import metweaks.client.healthbar.RenderHealthBar;
+import metweaks.client.gui.unitoverview.GuiUnitOverview;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;

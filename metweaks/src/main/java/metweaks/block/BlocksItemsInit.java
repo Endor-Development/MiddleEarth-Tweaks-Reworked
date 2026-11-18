@@ -7,10 +7,9 @@ import java.util.List;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import gnu.trove.map.TObjectIntMap;
-import lotr.common.content.LOTRBlocks;
-import lotr.common.content.LOTRItems;
+import lotr.common.LOTRDimension;
+import lotr.common.LOTRMod;
 import lotr.common.item.LOTRItemMug;
-import lotr.common.world.LOTRDimension;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import metweaks.ASMConfig;
@@ -35,7 +34,7 @@ public class BlocksItemsInit {
 						Iterator ores = ((List) field_biomeOres.get(biome.decorator)).iterator();
 						while(ores.hasNext()) {
 							Block block = (Block) field_block.get(field_oreGen.get(ores.next()));
-							if(block == LOTRBlocks.oreCopper || block == LOTRBlocks.oreTin || block == LOTRBlocks.oreSilver) {
+							if(block == LOTRMod.oreCopper || block == LOTRMod.oreTin || block == LOTRMod.oreSilver) {
 								
 								ores.remove();
 							}
@@ -54,13 +53,13 @@ public class BlocksItemsInit {
 		tool = "hoe";
 		Blocks.hay_block.setHarvestLevel(tool, 0);
 		if(MeTweaks.lotr) {
-			LOTRBlocks.thatch.setHarvestLevel(tool, 0);
-			LOTRBlocks.stairsThatch.setHarvestLevel(tool, 0);
-			LOTRBlocks.slabDoubleThatch.setHarvestLevel(tool, 0);
-			LOTRBlocks.slabSingleThatch.setHarvestLevel(tool, 0);
-			LOTRBlocks.daub.setHarvestLevel(tool, 0);
-			LOTRBlocks.stairsReed.setHarvestLevel(tool, 0);
-			LOTRBlocks.reedBars.setHarvestLevel(tool, 0);
+			LOTRMod.thatch.setHarvestLevel(tool, 0);
+			LOTRMod.stairsThatch.setHarvestLevel(tool, 0);
+			LOTRMod.slabDoubleThatch.setHarvestLevel(tool, 0);
+			LOTRMod.slabSingleThatch.setHarvestLevel(tool, 0);
+			LOTRMod.daub.setHarvestLevel(tool, 0);
+			LOTRMod.stairsReed.setHarvestLevel(tool, 0);
+			LOTRMod.reedBars.setHarvestLevel(tool, 0);
 		}
 	}
 	
@@ -72,23 +71,23 @@ public class BlocksItemsInit {
 		durations.put(Items.melon, half);
 		
 		if(MeTweaks.lotr) {
-			durations.put(LOTRItems.blackberry, half);
-			durations.put(LOTRItems.blueberry, half);
-			durations.put(LOTRItems.cranberry, half);
-			durations.put(LOTRItems.elderberry, half);
-			durations.put(LOTRItems.raspberry, half);
-			durations.put(LOTRItems.banana, half);
-			durations.put(LOTRItems.cherry, half);
-			durations.put(LOTRItems.date, half);
-			durations.put(LOTRItems.chestnutRoast, half);
-			durations.put(LOTRItems.lemon, half);
-			durations.put(LOTRItems.lime, half);
-			durations.put(LOTRItems.leek, half);
-			durations.put(LOTRItems.almond, half);
-			durations.put(LOTRItems.grapeRed, half);
-			durations.put(LOTRItems.grapeWhite, half);
-			durations.put(LOTRItems.raisins, half);
-			durations.put(LOTRItems.olive, half);
+			durations.put(LOTRMod.blackberry, half);
+			durations.put(LOTRMod.blueberry, half);
+			durations.put(LOTRMod.cranberry, half);
+			durations.put(LOTRMod.elderberry, half);
+			durations.put(LOTRMod.raspberry, half);
+			durations.put(LOTRMod.banana, half);
+			durations.put(LOTRMod.cherry, half);
+			durations.put(LOTRMod.date, half);
+			durations.put(LOTRMod.chestnutRoast, half);
+			durations.put(LOTRMod.lemon, half);
+			durations.put(LOTRMod.lime, half);
+			durations.put(LOTRMod.leek, half);
+			durations.put(LOTRMod.almond, half);
+			durations.put(LOTRMod.grapeRed, half);
+			durations.put(LOTRMod.grapeWhite, half);
+			durations.put(LOTRMod.raisins, half);
+			durations.put(LOTRMod.olive, half);
 		}
 	}
 	
@@ -104,7 +103,7 @@ public class BlocksItemsInit {
 			}
 		}
 		
-		LOTRItems.entDraught.setMaxStackSize(draughtMaxStacksize);
+		LOTRMod.entDraught.setMaxStackSize(draughtMaxStacksize);
 		
 	}
 }
