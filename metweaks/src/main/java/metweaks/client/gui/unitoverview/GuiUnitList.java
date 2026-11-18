@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import org.lwjgl.opengl.GL11;
+
 import gnu.trove.map.TIntObjectMap;
 import lotr.common.LOTRSquadrons;
 import lotr.common.enchant.LOTREnchantment;
@@ -33,10 +35,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
@@ -184,8 +189,8 @@ public class GuiUnitList extends GuiListExtended {
 	
 	
 	// Row Data
-	public int[] col_lens = new int[8];
-	public int[] col_starts = new int [8];
+	public int[] col_lens = new int[9];
+	public int[] col_starts = new int [9];
 	
 	
 	
@@ -278,6 +283,18 @@ public class GuiUnitList extends GuiListExtended {
 		
 	}
 	
+	public void updateStatic() {
+		for(int i = 0; i < col_lens.length; i++) {
+			instance.col_buttons[i].width = col_lens[i];
+		}
+		
+		for(Entry entry : entrys) {
+			int armorValue = entry.npc.getTotalArmorValue();
+			entry.armor = armorValue > 0 ? ""+armorValue : null;
+		}
+		
+	}
+	
 	public void postInitLens() {
 		col_lens[columnInventory] = 7 * 20; // 7 slots, may later be done in entry constructor. We will see.
 		col_lens[columnCompany] = Math.max(col_lens[columnCompany], 80);
@@ -287,7 +304,7 @@ public class GuiUnitList extends GuiListExtended {
 		
 		for(int i = 0; i < col_lens.length; i++) {
 			GuiColumnButton btn = instance.col_buttons[i];
-			int btnWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(btn.displayString) + 10+10+4;
+			int btnWidth = btn.contentWidth/*Minecraft.getMinecraft().fontRenderer.getStringWidth(btn.displayString)*/ + 10+10+4;
 			btn.width = col_lens[i] = Math.max(Math.max(lenNum, col_lens[i]+buffer), btnWidth);
 			
 		}
@@ -368,7 +385,7 @@ public class GuiUnitList extends GuiListExtended {
 		
 		
 		public boolean selected;
-		
+		public int mount;
 		
 		public Entry(LOTREntityNPC npc) {
 			
@@ -415,6 +432,9 @@ public class GuiUnitList extends GuiListExtended {
 		      if(company != null)
 		    	  squadronField.setText(company);
 		      squadronField.setEnableBackgroundDrawing(false);
+		      
+		      // 1 = rider, 2 = mount
+		      mount = npc.ridingEntity != null ? 2 : npc.riddenByEntity != null ? 1 : 0;
 		}
 		
 		
@@ -471,6 +491,7 @@ public class GuiUnitList extends GuiListExtended {
 				squadronField.yPosition = y+6;
 				int sqWidth = Math.max(80, col_lens[columnCompany]-5);
 				squadronField.width = sqWidth;
+				
 				Gui.drawRect(sqX, y+2, sqX + sqWidth, y + 2 + squadronField.height, even ? 0x20FFFFFF : 0x1AFFFFFF);
 				squadronField.drawTextBox();
 			}
@@ -521,6 +542,16 @@ public class GuiUnitList extends GuiListExtended {
 						xInv += 20;
 					}
 				}
+			}
+			
+			if(col_states[columnMount] && mount > 0) {
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glEnable(GL11.GL_BLEND);
+	            OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+	            
+				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationItemsTexture);
+				instance.drawTexturedModelRectFromIcon(col_starts[columnMount] + 8, ytxt - 5, mount == 2 ? Items.fishing_rod.getIconFromDamage(0) : Items.saddle.getIconFromDamage(0), 16, 16);
+				GL11.glDisable(GL11.GL_BLEND);
 			}
 		}
 

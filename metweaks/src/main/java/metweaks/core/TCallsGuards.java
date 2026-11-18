@@ -1,39 +1,13 @@
 package metweaks.core;
 
-import static metweaks.core.ClassHandler.lastBackwards;
-import static metweaks.core.ClassTransformer.coreprefix;
-import static metweaks.core.ClassTransformer.log;
-import static metweaks.core.ClassTransformer.obf;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ARETURN;
-import static org.objectweb.asm.Opcodes.ASTORE;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.GETSTATIC;
-import static org.objectweb.asm.Opcodes.ICONST_1;
-import static org.objectweb.asm.Opcodes.IFEQ;
-import static org.objectweb.asm.Opcodes.IFNE;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.POP;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
+import static metweaks.core.ClassTransformer.*;
+import static metweaks.core.ClassHandler.*;
+
+import org.objectweb.asm.tree.*;
 import metweaks.ASMConfig;
 import metweaks.guards.ExtraHiredData;
 
@@ -44,11 +18,14 @@ public class TCallsGuards {
     	for(MethodNode method : classNode.methods) {
     		
      		if(method.name.equals(name_use) && method.desc.equals(desc_use)) {
+     			boolean patchA = ASMConfig.guardsWanderRange;
+     			boolean patchB = ASMConfig.fixInvisibility;
+     			
      			AbstractInsnNode[] instrarray = method.instructions.toArray();
      			for(int i = 0; i < instrarray.length; i++) {
      				AbstractInsnNode node = instrarray[i];
      				
-     				if(node.getOpcode() == INVOKEVIRTUAL && ((MethodInsnNode) node).name.equals(obf ? "b" : "isWithinHomeDistance")) {
+     				if(patchA && node.getOpcode() == INVOKEVIRTUAL && ((MethodInsnNode) node).name.equals(obf ? "b" : "isWithinHomeDistance")) {
      					
      					AbstractInsnNode next = node.getNext();
      					if(!(next instanceof JumpInsnNode))
@@ -73,12 +50,37 @@ public class TCallsGuards {
     	     				method.instructions.remove(node2);
     	     				
     	     			}
-    	     			log.info(coreprefix+": Patched EntityAITarget.isSuitableTarget()");
-    	     			break;
+    	     			log.info(coreprefix+": Patched EntityAITarget.isSuitableTarget() #1");
+    	     			patchA = false;
+    	     			//break;
+     				}
+     				
+     				if(patchB && node.getOpcode() == GETFIELD) {
+     					FieldInsnNode fnode = (FieldInsnNode) node;
+     					if(fnode.name.equals(obf ? "a" : "nearbyOnly") && fnode.owner.equals(obf ? "vu" : "net/minecraft/entity/ai/EntityAITarget") && fnode.desc.equals("Z")) {
+     						LabelNode label = new LabelNode();
+     						InsnList list = new InsnList();
+     						list.add(new VarInsnNode(ALOAD, 0)); // this
+     						list.add(new FieldInsnNode(GETFIELD, obf ? "vu" : "net/minecraft/entity/ai/EntityAITarget", obf ? "c" : "taskOwner", obf ? "Ltd;" : "Lnet/minecraft/entity/EntityCreature;")); // taskOwner
+         					list.add(new VarInsnNode(ALOAD, 1)); // target
+         					list.add(new VarInsnNode(ALOAD, 0)); // this
+         					list.add(new MethodInsnNode(INVOKEVIRTUAL, obf ? "vu" : "net/minecraft/entity/ai/EntityAITarget", obf ? "f" : "getTargetDistance", "()D", false));
+         					list.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(Hooks.class), "suitableDistance", "(Lnet/minecraft/entity/EntityCreature;Lnet/minecraft/entity/EntityLivingBase;D)Z", false));
+         					list.add(new JumpInsnNode(IFNE, label));
+         					list.add(new InsnNode(ICONST_0));
+         					list.add(new InsnNode(IRETURN));
+         					list.add(label);
+         					method.instructions.insertBefore(node.getPrevious(), list);
+         					log.info(coreprefix+": Patched EntityAITarget.isSuitableTarget() #2");
+         					patchB = false;
+     					}
+     					
      				}
      			}
      		}
      	}
+    	
+    	
 	}
     
     static void transformLOTRGuiHiredWarrior(ClassNode classNode) {
@@ -170,7 +172,7 @@ public class TCallsGuards {
     		if(method.name.equals("onMessage") && method.desc.equals("(Llotr/common/network/LOTRPacketHiredUnitCommand;Lcpw/mods/fml/common/network/simpleimpl/MessageContext;)Lcpw/mods/fml/common/network/simpleimpl/IMessage;")) {
     			for(AbstractInsnNode node : method.instructions.toArray()) {
     				// insert after first one, then stop
-    				//printNode(node);
+    				
     				/*
 					ILOAD page			
 					ICONST_1

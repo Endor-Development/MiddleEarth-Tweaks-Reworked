@@ -95,7 +95,7 @@ public class RenderHealthBar {
 	
 	private static boolean hasAttributes(EntityLivingBase living) {
 		if(living instanceof EntityHorse || (MeTweaks.lotr && living instanceof LOTREntityNPCRideable)) {
-			if(!attributesOnlyTamed || (living instanceof EntityHorse && ((EntityHorse) living).isTame()) || (MeTweaks.lotr && living instanceof LOTREntityNPCRideable && ((LOTREntityNPCRideable) living).isNPCTamed())) {
+			if((!attributesOnlyTamed || attributesAll) || (living instanceof EntityHorse && ((EntityHorse) living).isTame()) || (MeTweaks.lotr && living instanceof LOTREntityNPCRideable && ((LOTREntityNPCRideable) living).isNPCTamed())) {
 				return true;
 			}
 		}
@@ -124,6 +124,10 @@ public class RenderHealthBar {
 		return Math.round(input * 10.0) / 10.0;
 	}
 	
+	public static float getTagRotateYOffset() {
+		return 0.17F + Math.max(0.0F, (float) offsetY - 0.48F);
+	}
+	
 	public static void renderBar(Entity topentity, float ticks, boolean isCursor) {
 		
 		
@@ -138,6 +142,7 @@ public class RenderHealthBar {
 		float addY = 0F;
 		
 		double heightOffset = offsetY;
+		float offsetYrotate = 0.0F;
 		// disable for stacked
 		boolean textDesc = showDesc && topentity.ridingEntity == null;
 
@@ -169,7 +174,12 @@ public class RenderHealthBar {
 				}
 				else {
 					
-					heightOffset += mc.fontRenderer.FONT_HEIGHT * 0.015 * (3 + mc.fontRenderer.listFormattedStringToWidth(LOTRSpeechClient.getSpeechFor(npc).getSpeech(), 150).size());
+					//heightOffset += mc.fontRenderer.FONT_HEIGHT * 0.015 * (3 + mc.fontRenderer.listFormattedStringToWidth(LOTRSpeechClient.getSpeechFor(npc).getSpeech(), 150).size());
+					// is now our rotation point
+					heightOffset = 0.3D;
+					// minimum is 0.3 + 0.17 to not overlap
+					// now take from config subtracted by what we have already added as min
+					offsetYrotate = 0.17F + Math.max(0.0F, (float) offsetY - 0.46F) + mc.fontRenderer.FONT_HEIGHT * 0.015F * (3 + mc.fontRenderer.listFormattedStringToWidth(LOTRSpeechClient.getSpeechFor(npc).getSpeech(), 150).size());
 				}
 			}
 		}
@@ -177,6 +187,8 @@ public class RenderHealthBar {
 		if(MeTweaks.customNpcs && CustomNpcsBridge.hasChatMessage(topentity)) {
 			return;
 		}
+		
+		//boolean useColorRule = false;
 		
 		if(topentity instanceof EntityPlayer) {
 			if(MeTweaks.mpm && MpmBridge.hasChatMessage(topentity)) {
@@ -188,7 +200,7 @@ public class RenderHealthBar {
 			
 			if(hideOnPlayers || topentity.isSneaking())
 				return;
-			if(hideOnFellowshipMembers && MeTweaks.lotr) {
+			/*if(hideOnFellowshipMembers && MeTweaks.lotr) {
 				UUID uuid = ((EntityPlayer) topentity).getUniqueID();
 				List<LOTRFellowshipClient> fellowships = LOTRLevelData.getData(mc.thePlayer).getClientFellowships();
 			    for(LOTRFellowshipClient fs : fellowships) {
@@ -196,10 +208,55 @@ public class RenderHealthBar {
 			    		return;
 			    	}
 			    }
+			}*/
+			
+			
+			if((hideOnFellowshipMembers || fellowship != null) && MeTweaks.lotr) {
+				UUID uuid = ((EntityPlayer) topentity).getUniqueID();
+				// only fellowships the client is part with
+				List<LOTRFellowshipClient> fellowships = LOTRLevelData.getData(mc.thePlayer).getClientFellowships();
+				
+				boolean hasRule = fellowship != null;
+				boolean noSharedFellowShip = true;
+			    for(LOTRFellowshipClient fs : fellowships) {
+			    	// shares fellowship
+			    	if(fs.containsPlayer(uuid)) {
+			    		// blacklist
+			    		if(hasRule) {
+			    			if(blackListFellowship && fs.getName().equalsIgnoreCase(fellowship)) {
+			    				//useColorRule = true;
+			    				return;
+			    			}
+			    		}
+			    		else if(hideOnFellowshipMembers) {
+			    			return;
+			    		}
+			    		noSharedFellowShip = false;
+			    	}
+			    	// doesnt share this fellowship
+			    	// whitelist
+			    	else if(hasRule && !blackListFellowship && fs.getName().equalsIgnoreCase(fellowship)) {
+			    		//useColorRule = true;
+			    		return;
+			    	}
+			    }
+			    // doesnt share any fellowship
+		    	// whitelist
+			    if(hasRule && noSharedFellowShip && !blackListFellowship) {
+			    	//useColorRule = true;
+			    	return;
+		    	}
 			}
 			
-			if(heightOffset < 0.665)
-				heightOffset = 0.665;
+			//if(heightOffset < 0.665)
+			//	heightOffset = 0.665;
+			
+			// is now our rotation point
+			heightOffset = 0.5D;
+			// minimum is 0.5 + 0.17 to not overlap
+			// now take from config subtracted by what we have already added as min
+			offsetYrotate = getTagRotateYOffset();
+			
 			
 			hiredOrPlayer = true;
 		}
@@ -209,7 +266,13 @@ public class RenderHealthBar {
 		}
 		
 		if(heightOffset < 0.65 && topentity instanceof EntityLiving && (((EntityLiving) topentity).getAlwaysRenderNameTagForRender() || ((EntityLiving) topentity).hasCustomNameTag())) {
-			heightOffset = 0.65;
+			//heightOffset = 0.65;
+			// is now our rotation point
+			heightOffset = 0.5D;
+			//offsetYrotate = 0.244F;
+			// minimum is 0.5 + 0.17 to not overlap
+			// now take from config subtracted by what we have already added as min
+			offsetYrotate = getTagRotateYOffset();
 		}
 		
 		
@@ -255,11 +318,16 @@ public class RenderHealthBar {
 
 					
 				GL11.glPushMatrix();
+				
 				GL11.glTranslatef(x, y, z);
 				GL11.glRotatef(-RenderManager.instance.playerViewY, 0F, 1F, 0F);
 				GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
-				float scale = 0.01F;
+				if(offsetYrotate != 0.0F)
+					GL11.glTranslatef(0.0f, offsetYrotate, 0.0f);
+				float scale = 0.01F * scaleFactor;
 				GL11.glScalef(-scale, -scale, scale);
+				//float scale = 0.01F * scaleFactor;
+				//GL11.glScalef(-scale, -scale, scale);
 				
 				if(addY < 0)
 			    	GL11.glTranslatef(0, addY, 0);
@@ -490,9 +558,7 @@ public class RenderHealthBar {
 				String strMinHealth = "" + Math.round(health);
 				
 				
-				
 				String strMaxHealth = "" + Math.round(healthmax);
-				
 				
 				String strHealth = strMinHealth + " / "+strMaxHealth;
 				
@@ -551,7 +617,7 @@ public class RenderHealthBar {
 				if(iconJump) {
 					fontrender.drawString(jumpstr, posJump, offLine1, 0xFFFFFFFF);
 				}
-				if(iconArmor) {
+				if(iconArmor/* && !groupArmor*/) {
 					fontrender.drawString(""+armor, halfsize - lenArmor, offLine1, 0xFFFFFFFF);
 				}
 
@@ -667,11 +733,12 @@ public class RenderHealthBar {
 		List<Entity> entities = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(
 				look.xCoord * finalDistance, look.yCoord * finalDistance, look.zCoord * finalDistance).expand(1, 1, 1));
 		double minDistance = distance;
-		
+		// entity is removed from chunk but not from loadedentitylist, only happens on >10fps
 		// avoid looking at horse, so we can also view through
 		Entity mount = mc.renderViewEntity.ridingEntity;
 
 		for(Entity entity : entities) {
+			
 			
 			if(entity.canBeCollidedWith() && mount != entity) {
 				float collisionBorderSize = entity.getCollisionBorderSize();
@@ -704,6 +771,8 @@ public class RenderHealthBar {
 		
 		if(lastMouseOverExpire > System.currentTimeMillis()) {
 			Entity entity =  mc.theWorld.getEntityByID(lastMouseOverEntity);
+			
+			
 			// fix mount bar showing up for a few seconds
 			if(entity != mount) return entity;
 		}
@@ -769,6 +838,7 @@ public class RenderHealthBar {
             	frustrum = new Frustrum();
             
             frustrum.setPosition(cameraX, cameraY, cameraZ);
+            
             
             @SuppressWarnings("unchecked")
 			List<Entity> lentitylist = world.loadedEntityList;

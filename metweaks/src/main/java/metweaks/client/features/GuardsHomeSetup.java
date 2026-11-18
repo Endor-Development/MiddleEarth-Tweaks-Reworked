@@ -12,6 +12,7 @@ import metweaks.events.ClientEvents;
 import metweaks.guards.HiredInfoAccess;
 import metweaks.network.HiredAdvInfoPacket;
 import metweaks.network.NetworkHandler;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -39,7 +40,8 @@ public class GuardsHomeSetup {
 						int x = event.x;
 						int y = event.y;
 						int z = event.z;
-						if (!event.world.getBlock(x, y, z).isReplaceable(event.world, x, y, z)) {
+						Block block = event.world.getBlock(x, y, z);
+						if(block.getMaterial().isSolid()/* && !block.isReplaceable(event.world, x, y, z)*/) {
 				     		
 				        	 switch(event.face) {
 					     		case 0: --y; break;

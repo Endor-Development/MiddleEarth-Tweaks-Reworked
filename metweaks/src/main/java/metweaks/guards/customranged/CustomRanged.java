@@ -10,21 +10,22 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lotr.client.gui.LOTRGuiHiredWarriorInventory;
-import lotr.common.content.LOTRItems;
+import lotr.common.LOTRMod;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentHelper;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.item.LOTREntityArrowPoisoned;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTREntityTauredainBlowgunner;
 import lotr.common.entity.npc.LOTRInventoryHiredReplacedItems;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
-import lotr.common.entity.npc.farharad.LOTREntityTauredainBlowgunner;
 import lotr.common.entity.projectile.LOTREntityCrossbowBolt;
 import lotr.common.entity.projectile.LOTREntityDart;
 import lotr.common.entity.projectile.LOTREntityFirePot;
 import lotr.common.entity.projectile.LOTREntityPebble;
 import lotr.common.entity.projectile.LOTREntityPlate;
+import lotr.common.entity.projectile.LOTREntityProjectileBase;
 import lotr.common.entity.projectile.LOTREntitySpear;
 import lotr.common.entity.projectile.LOTREntityThrowingAxe;
 import lotr.common.entity.projectile.LOTREntityThrownTermite;
@@ -91,104 +92,101 @@ public class CustomRanged {
 	
 	public static boolean allowCategory(Item item, Category category) {
 		int i = ASMConfig.guardsLockCategoryRanged;
-		if(i == 0) {
-			return true;
-		}
+		if(i == 0) return true;
 		Category current = Category.getCategory(item);
 		
 		return i == 1 ? current == category : current.ordinal() <= category.ordinal();
 	}
 	
 	public static void updateHeldItem(LOTREntityNPC theNPC) {
-		if(!skipHeldItemUpdate && !theNPC.npcItemsInv.getIsEating()) {
-			theNPC.refreshCurrentAttackMode();
-		} 
+		if(!skipHeldItemUpdate && !theNPC.npcItemsInv.getIsEating())
+			theNPC.refreshCurrentAttackMode(); 
 		
 	}
 	
 	public static void equipReplacement(LOTRInventoryHiredReplacedItems inv, int i, ItemStack itemstack, boolean replacedMeleeWeapons, LOTREntityNPC theNPC, ItemStack replaced) {
-		  boolean origin = ItemStack.areItemStacksEqual(replaced, itemstack);
-		  LOTRInventoryNPCItems npcItems = theNPC.npcItemsInv;
-		  boolean storedIdleHolder = npcItems.getReplacedIdleItem() != null || npcItems.getReplacedIdleItemMounted() != null;
-		  
-		  
-		  if(i == LOTRInventoryHiredReplacedItems.MELEE) {
-			  
-			  boolean idleMelee = ItemStack.areItemStacksEqual(npcItems.getMeleeWeapon(), npcItems.getIdleItem());
-			  npcItems.setMeleeWeapon(itemstack);
-			  
-			  if(!replacedMeleeWeapons) {
-				  npcItems.setReplacedMeleeWeaponMounted(npcItems.getMeleeWeaponMounted());
-				  setReplacedMeleeWeapons(inv, true);
-			  } 
-			  
-			  if(!storedIdleHolder && idleMelee) {
-				  npcItems.setReplacedIdleItem(npcItems.getIdleItem());
-				  npcItems.setReplacedIdleItemMounted(npcItems.getIdleItemMounted());
-			  }
-			  
-			  npcItems.setMeleeWeaponMounted(itemstack);
-			  
-			  if(idleMelee) {
-				  npcItems.setIdleItem(itemstack);
-				  npcItems.setIdleItemMounted(itemstack);
-			  } 
-			  
-			  if(origin) {
-				  if(storedIdleHolder && idleMelee) {
-					  npcItems.setIdleItem(npcItems.getReplacedIdleItem());
-					  npcItems.setIdleItemMounted(npcItems.getReplacedIdleItemMounted());
-					  npcItems.setReplacedIdleItem(null);
-					  npcItems.setReplacedIdleItemMounted(null);
-				  }
-				  
-				  if(replacedMeleeWeapons) {
-					  npcItems.setMeleeWeaponMounted(npcItems.getReplacedMeleeWeaponMounted());
-					  npcItems.setReplacedMeleeWeaponMounted(null);
-				      setReplacedMeleeWeapons(inv, false);
-				  }
-			  }
-			  
-			  updateHeldItem(theNPC);
-		  } 
-		  else if (i == LOTRInventoryHiredReplacedItems.RANGED) {
-			  boolean idleRanged = ItemStack.areItemStacksEqual(npcItems.getRangedWeapon(), npcItems.getIdleItem());
-			  
-			  npcItems.setRangedWeapon(itemstack);
-			  CustomRanged.setupRanged(theNPC, itemstack, ASMConfig.aiRangedImprovements);
-			  
-			  
-			  
-			  if(!storedIdleHolder && idleRanged) {
-				  npcItems.setReplacedIdleItem(npcItems.getIdleItem());
-				  npcItems.setReplacedIdleItemMounted(npcItems.getIdleItemMounted());
-				 
-			  }
-			
-			  if (idleRanged) {
-				  npcItems.setIdleItem(itemstack);
-				  npcItems.setIdleItemMounted(itemstack);
-			  }
-			  
-			  if(origin) {
-				  if(storedIdleHolder && idleRanged) {
-					  npcItems.setIdleItem(npcItems.getReplacedIdleItem());
-					  npcItems.setIdleItemMounted(npcItems.getReplacedIdleItemMounted());
-					  npcItems.setReplacedIdleItem(null);
-					  npcItems.setReplacedIdleItemMounted(null);
-				  }
-			  }
-			  
-			  updateHeldItem(theNPC);
-		  } 
-		  else if (i == LOTRInventoryHiredReplacedItems.BOMB) {
-			  npcItems.setBomb(itemstack);
-			  updateHeldItem(theNPC);
-		  } 
-		  else {
-			  theNPC.setCurrentItemOrArmor(4 - i, itemstack);
-		  } 
-	  }
+		boolean origin = ItemStack.areItemStacksEqual(replaced, itemstack);
+		LOTRInventoryNPCItems npcItems = theNPC.npcItemsInv;
+		boolean storedIdleHolder = npcItems.getReplacedIdleItem() != null || npcItems.getReplacedIdleItemMounted() != null;
+
+
+		if(i == LOTRInventoryHiredReplacedItems.MELEE) {
+
+			boolean idleMelee = ItemStack.areItemStacksEqual(npcItems.getMeleeWeapon(), npcItems.getIdleItem());
+			npcItems.setMeleeWeapon(itemstack);
+
+			if(!replacedMeleeWeapons) {
+				npcItems.setReplacedMeleeWeaponMounted(npcItems.getMeleeWeaponMounted());
+				setReplacedMeleeWeapons(inv, true);
+			} 
+
+			if(!storedIdleHolder && idleMelee) {
+				npcItems.setReplacedIdleItem(npcItems.getIdleItem());
+				npcItems.setReplacedIdleItemMounted(npcItems.getIdleItemMounted());
+			}
+
+			npcItems.setMeleeWeaponMounted(itemstack);
+
+			if(idleMelee) {
+				npcItems.setIdleItem(itemstack);
+				npcItems.setIdleItemMounted(itemstack);
+			} 
+
+			if(origin) {
+				if(storedIdleHolder && idleMelee) {
+					npcItems.setIdleItem(npcItems.getReplacedIdleItem());
+					npcItems.setIdleItemMounted(npcItems.getReplacedIdleItemMounted());
+					npcItems.setReplacedIdleItem(null);
+					npcItems.setReplacedIdleItemMounted(null);
+				}
+
+				if(replacedMeleeWeapons) {
+					npcItems.setMeleeWeaponMounted(npcItems.getReplacedMeleeWeaponMounted());
+					npcItems.setReplacedMeleeWeaponMounted(null);
+					setReplacedMeleeWeapons(inv, false);
+				}
+			}
+
+			updateHeldItem(theNPC);
+		} 
+		else if (i == LOTRInventoryHiredReplacedItems.RANGED) {
+			boolean idleRanged = ItemStack.areItemStacksEqual(npcItems.getRangedWeapon(), npcItems.getIdleItem());
+
+			npcItems.setRangedWeapon(itemstack);
+			CustomRanged.setupRanged(theNPC, itemstack, ASMConfig.aiRangedImprovements);
+
+
+
+			if(!storedIdleHolder && idleRanged) {
+				npcItems.setReplacedIdleItem(npcItems.getIdleItem());
+				npcItems.setReplacedIdleItemMounted(npcItems.getIdleItemMounted());
+
+			}
+
+			if (idleRanged) {
+				npcItems.setIdleItem(itemstack);
+				npcItems.setIdleItemMounted(itemstack);
+			}
+
+			if(origin) {
+				if(storedIdleHolder && idleRanged) {
+					npcItems.setIdleItem(npcItems.getReplacedIdleItem());
+					npcItems.setIdleItemMounted(npcItems.getReplacedIdleItemMounted());
+					npcItems.setReplacedIdleItem(null);
+					npcItems.setReplacedIdleItemMounted(null);
+				}
+			}
+
+			updateHeldItem(theNPC);
+		} 
+		else if (i == LOTRInventoryHiredReplacedItems.BOMB) {
+			npcItems.setBomb(itemstack);
+			updateHeldItem(theNPC);
+		} 
+		else {
+			theNPC.setCurrentItemOrArmor(4 - i, itemstack);
+		} 
+	}
 	
 	
 	
@@ -204,7 +202,6 @@ public class CustomRanged {
 	}
 	
 	/*public static Slot makeSlotRanged(LOTRContainerHiredWarriorInventory container, LOTREntityNPC npc) {
-		//System.out.println("anyone?");
 		//ReflectionHelper.setPrivateValue(LOTRContainerHiredWarriorInventory.class, container, (int) ReflectionHelper.getPrivateValue(LOTRContainerHiredWarriorInventory.class, container, "npcActiveSlotCount")+ 1, "npcActiveSlotCount");
 		
 		return new LOTRSlotHiredReplaceItem(new LOTRSlotRangedWeapon(npc, container.proxyInv, LOTRInventoryHiredReplacedItems.RANGED, 50, 28), npc);
@@ -213,12 +210,33 @@ public class CustomRanged {
 	public static void drawGuiContainerBackgroundLayer(LOTRContainerHiredWarriorInventory containerInv, LOTRGuiHiredWarriorInventory gui, int guiLeft, int guiTop) {
 		//Slot slotMelee = containerInv.getSlotFromInventory(containerInv.proxyInv, 4);
 	    Slot slotRanged = containerInv.getSlotFromInventory(containerInv.proxyInv, LOTRInventoryHiredReplacedItems.RANGED);
-	    if(slotRanged != null) {
-			gui.drawTexturedModalRect(guiLeft + slotRanged.xDisplayPosition - 1, guiTop + slotRanged.yDisplayPosition - 1, 49, 47, 18, 18);
-		}
+	    if(slotRanged != null)
+	    	gui.drawTexturedModalRect(guiLeft + slotRanged.xDisplayPosition - 1, guiTop + slotRanged.yDisplayPosition - 1, 49, 47, 18, 18);
 	}
 	
 	public static float globalPenaltyRanged = Math.max(1F, ASMConfig.guardsAttackDelayFactorRanged * 0.01F);
+	
+	public static final float gHiredsDamageFactorProjectiles = ASMConfig.npcDamageFactorProjectiles * 0.01F;
+	public static final float gHiredsCriticalProjectileChance = ASMConfig.npcCriticalProjectileChance * 0.01F;
+	
+	/*
+	Projectile	Player		NPC			Factor	Weight
+	arrow		1.95 - 3.0	1.5 - 1.6	1.875	0.875
+	axe			3.0			1.5			2.0		1.0
+	spear		0.3 - 3.0	1.6			1.875	0.875
+	sling		1.0			1.5			0.7		-0.3
+	termite		1.5			1.0			1.5		0.5
+	firepot		1.2			1.5			0.8		-0.2
+	plate		1.5			1.5			1.0		1.0
+	blowgun		1.95 - 3.0	1.52		1.97	0.97	
+	crossbow	3.0			1.52		1.97	0.97
+	*/
+	
+	public static float getFactor(float weight, boolean hired) {
+		if(gHiredsDamageFactorProjectiles != 1F && (hired || !ASMConfig.projectileFlagsHiredsOnly))
+			return 1F + (gHiredsDamageFactorProjectiles - 1F) * weight;
+		return 1F;
+	}
 	
 	public static enum Category {
 		SLING(20, 40, 12F, false, 		4F), // LOTRMod.sling
@@ -271,29 +289,28 @@ public class CustomRanged {
 			if(item instanceof LOTRItemCrossbow) {
 				return CROSSBOW;
 			}
-			else if(item == LOTRItems.sling) {
+			else if(item == LOTRMod.sling) {
 				return SLING;
 			}
-			else if(item == LOTRItems.tauredainBlowgun) {
+			else if(item == LOTRMod.tauredainBlowgun) {
 				return BLOWGUN;
 			}
-			else if(item == LOTRItems.termite) {
+			else if(item == LOTRMod.termite) {
 				return TERMITE;
 			}
-			else if(item == LOTRItems.rhunFirePot) {
+			else if(item == LOTRMod.rhunFirePot) {
 				return FIREPOT;
 			}
 			else if(item.getClass() == LOTRItemThrowingAxe.class) {
 				return AXE;
 			}
-			else if(item.getClass() == LOTRItemPlate.class && item != LOTRItems.woodPlate) {
+			else if(item.getClass() == LOTRItemPlate.class && item != LOTRMod.woodPlate) {
 				return PLATE;
 			}
-			else if(item.getClass() == LOTRItemSpear.class && item != LOTRItems.spearStone) {
+			else if(item.getClass() == LOTRItemSpear.class && item != LOTRMod.spearStone) {
 				return SPEAR;
-			} else {
-				return BOW;
 			}
+			else return BOW;
 		}
 		
 		// dont see anything else as bow, used for launching
@@ -387,9 +404,7 @@ public class CustomRanged {
 				Entity entity = null;
 				for(WorldServer world : MinecraftServer.getServer().worldServers) {
 					entity = world.getEntityByID(key);
-					if(entity != null) {
-						break;
-					}
+					if(entity != null) break;
 				}
 				
 				if(entity == null || entity.isDead) {
@@ -443,7 +458,7 @@ public class CustomRanged {
 					
 					ddr.factor_timeMin = (float) timeMin / (float) category.attackTimeMin;
 					ddr.factor_timeMax = (float) timeMax / (float) category.attackTimeMax;
-					ddr.factor_range = range / category.attackRange;
+					ddr.factor_range = (float) range / (float) category.attackRange;
 					ddrMap.put(id, ddr);
 					return ddr;
 				}
@@ -478,9 +493,16 @@ public class CustomRanged {
 			boolean same = ddr.category == category;
 			
 			float penalty = same ? 1 : category.penalty;
-			boolean dynamic = same || ASMConfig.guardsDynamicAttackDelayRanged;
+			boolean dynamic = same || ASMConfig.guardsDynamicAttackDelayRanged > 0;
+			
 			float factor_timeMin = dynamic ? ddr.factor_timeMin : 1;
 			float factor_timeMax = dynamic ? ddr.factor_timeMax : 1;
+			
+			if(!same && ASMConfig.guardsDynamicAttackDelayRanged == 2) {
+				factor_timeMin = Math.min(1F, factor_timeMin);
+				factor_timeMax = Math.min(1F, factor_timeMax);
+			}
+			
 			//System.out.println(ddr.category+" "+category+" "+same+" "+factor_timeMax+" "+penalty+" "+ dynamic);
 			setMinTimeRanged(npc, (int) (factor_timeMin * category.attackTimeMin * penalty));
 			setMaxTimeRanged(npc, (int) (factor_timeMax * category.attackTimeMax * penalty));
@@ -490,7 +512,7 @@ public class CustomRanged {
 				ExtraHiredData ext = ExtraHiredData.load(npc);
 				int delta = ext.ammoRange - ext.ammoRangeDef;
 				
-				ext.ammoRangeDef = newDefAmmo;
+				ext.ammoRangeDef = (byte) newDefAmmo;
 				ext.setAmmoRangeVerify(newDefAmmo + delta, npc);
 				
 				if(updateMoveRange) {
@@ -581,9 +603,8 @@ public class CustomRanged {
 					
 					if(allow) {
 						// we only need it for untouched npcs
-						if(!customized && ASMConfig.randomEnchRangedNpcWeapons) {
+						if(!customized && ASMConfig.randomEnchRangedNpcWeapons)
 							handleRandomEnch(npc, stack);
-						}
 						
 						
 						
@@ -592,19 +613,21 @@ public class CustomRanged {
 						World world = npc.worldObj;
 						boolean poison;
 						float speed;
+						Random rand = npc.getRNG();
+						boolean hired = npc.hiredNPCInfo.isActive;
 						//float str;
 						switch(category) {
 							case FIREPOT:
-								spawnByTemplate(new LOTREntityFirePot(world, npc), npc, target, 1.5F, 0.99F, 0.04F, accuracy);
+								spawnByTemplate(new LOTREntityFirePot(world, npc), npc, target, 1.5F * getFactor(-0.2F, hired), 0.99F, 0.04F, accuracy);
 								return;
 							case TERMITE:
 								if(ASMConfig.guardsEquipAllowTermites) {
-									spawnByTemplate(new LOTREntityThrownTermite(world, npc), npc, target, 1F, 0.99F, 0.03F, accuracy);
+									spawnByTemplate(new LOTREntityThrownTermite(world, npc), npc, target, 1F * getFactor(0.5F, hired), 0.99F, 0.03F, accuracy);
 									return;
 								}
 								break;
 							case SLING:
-								spawnByTemplate(new LOTREntityPebble(world, npc).setSling(), npc, target, 1.5F, 0.99F, 0.04F, accuracy);
+								spawnByTemplate(new LOTREntityPebble(world, npc).setSling(), npc, target, 1.5F * getFactor(-0.3F, hired), 0.99F, 0.04F, accuracy);
 								return;
 							case PLATE:
 								spawnByTemplate(new LOTREntityPlate(world, ((LOTRItemPlate) item).plateBlock, npc), npc, target, 1.5F, 0.99F, 0.02F, accuracy);
@@ -613,43 +636,42 @@ public class CustomRanged {
 							case SPEAR:
 								LOTREntitySpear spear = new LOTREntitySpear(world, npc, target, stack, 1.07F, accuracy);
 								int fireAspect2 = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) + LOTREnchantmentHelper.calcFireAspect(stack);
-							    if (fireAspect2 > 0) {
-									spear.setFire(100);
-								} 
+							    if (fireAspect2 > 0)
+							      spear.setFire(100); 
 							    for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {
-							      if (ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench)) {
-									LOTREnchantmentHelper.setProjectileEnchantment(spear, ench);
-								  } 
+							      if (ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench))
+							        LOTREnchantmentHelper.setProjectileEnchantment(spear, ench); 
 							    } 
-						        npc.playSound("random.bow", 1.0F, 1.0F / (npc.getRNG().nextFloat() * 0.4F + 1.2F));
-						        setupProjectileVelocity(spear, target, 1.6F, 0.99F, 0.05F, accuracy);
+						        npc.playSound("random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F));
+						        setupProjectileVelocity(spear, target, 1.6F * getFactor(0.875F, hired), 0.99F, 0.05F, accuracy);
+						        setCriticalByChance(spear, rand);
 								world.spawnEntityInWorld(spear);
 								return;
 							case AXE:
 								LOTREntityThrowingAxe axe = new LOTREntityThrowingAxe(world, npc, target, stack, 1.0F, accuracy);
 								int fireAspect = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) + LOTREnchantmentHelper.calcFireAspect(stack);
-							    if(fireAspect > 0) {
-									axe.setFire(100);
-								} 
+							    if(fireAspect > 0)
+							    	axe.setFire(100); 
 							    for(LOTREnchantment ench : LOTREnchantment.allEnchantments) {
-							    	if(ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench)) {
-										LOTREnchantmentHelper.setProjectileEnchantment(axe, ench);
-									} 
+							    	if(ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench))
+							    		LOTREnchantmentHelper.setProjectileEnchantment(axe, ench); 
 							    }
 								
-								npc.playSound("random.bow", 1.0F, 1.0F / (npc.getRNG().nextFloat() * 0.4F + 0.8F));
-								setupProjectileVelocity(axe, target, 1.5F, 0.99F, 0.05F, accuracy);
+								npc.playSound("random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+								setupProjectileVelocity(axe, target, 1.5F * getFactor(1.0F, hired), 0.99F, 0.05F, accuracy);
+								setCriticalByChance(axe, rand);
 								world.spawnEntityInWorld(axe);
 							    npc.swingItem();
 								return;
 							case BLOWGUN:
 								
 							    speed = LOTRItemBlowgun.getBlowgunLaunchSpeedFactor(stack);
-							    LOTREntityDart dart = ((LOTRItemDart) LOTRItems.tauredainDart).createDart(world, npc, target, new ItemStack(npc.getRNG().nextInt(npc instanceof LOTREntityTauredainBlowgunner ? 100 : 200) <= ASMConfig.tauredainPoisonDartChance ? LOTRItems.tauredainDartPoisoned : LOTRItems.tauredainDart), 1, accuracy);
+							    LOTREntityDart dart = ((LOTRItemDart) LOTRMod.tauredainDart).createDart(world, npc, target, new ItemStack(rand.nextInt(npc instanceof LOTREntityTauredainBlowgunner ? 100 : 200) <= ASMConfig.tauredainPoisonDartChance ? LOTRMod.tauredainDartPoisoned : LOTRMod.tauredainDart), 1, accuracy);
 							   
 							    LOTRItemBlowgun.applyBlowgunModifiers(dart, stack); 
-							    npc.playSound("lotr:item.dart", 1.0F, 1.0F / (npc.getRNG().nextFloat() * 0.4F + 1.2F) + 0.5F);
-							    setupProjectileVelocity(dart, target, speed * 1.52F, 0.99F, 0.05F, accuracy);
+							    npc.playSound("lotr:item.dart", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+							    setupProjectileVelocity(dart, target, speed * 1.52F * getFactor(0.97F, hired), 0.99F, 0.05F, accuracy);
+							    setCriticalByChance(dart, rand);
 							    world.spawnEntityInWorld(dart);
 								return;
 							
@@ -657,13 +679,14 @@ public class CustomRanged {
 								
 								
 							    speed = LOTRItemCrossbow.getCrossbowLaunchSpeedFactor(stack);
-							    poison = npc.getRNG().nextFloat() < getPoisonedArrowChance(npc);
-							    ItemStack boltitem = new ItemStack(poison ? LOTRItems.crossbowBoltPoisoned : LOTRItems.crossbowBolt);
+							    poison = rand.nextFloat() < getPoisonedArrowChance(npc);
+							    ItemStack boltitem = new ItemStack(poison ? LOTRMod.crossbowBoltPoisoned : LOTRMod.crossbowBolt);
 							    LOTREntityCrossbowBolt bolt = new LOTREntityCrossbowBolt(world, npc, target, boltitem, 1, accuracy);
 							    
 							    LOTRItemCrossbow.applyCrossbowModifiers(bolt, stack); 
-							    npc.playSound("lotr:item.crossbow", 1.0F, 1.0F / (npc.getRNG().nextFloat() * 0.4F + 0.8F));
-							    setupProjectileVelocity(bolt, target, speed * 1.52F, 0.99F, 0.05F, accuracy);
+							    npc.playSound("lotr:item.crossbow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+							    setupProjectileVelocity(bolt, target, speed * 1.52F * getFactor(0.97F, hired), 0.99F, 0.05F, accuracy);
+							    setCriticalByChance(bolt, rand);
 							    world.spawnEntityInWorld(bolt);
 								return;
 							
@@ -672,15 +695,21 @@ public class CustomRanged {
 							case BOW:
 								if(item instanceof ItemBow) {
 								   
-								    speed = LOTRItemBow.getLaunchSpeedFactor(stack) * 1.5F;
+								    speed = LOTRItemBow.getLaunchSpeedFactor(stack) * 1.5F * getFactor(0.875F, hired);
 								    
-								    poison = npc.getRNG().nextFloat() < getPoisonedArrowChance(npc);
+								    
+								    poison = rand.nextFloat() < getPoisonedArrowChance(npc);
 								    EntityArrow arrow = poison ? new LOTREntityArrowPoisoned(world, npc, target, 1, accuracy) : new EntityArrow(world, npc, target, 1, accuracy);
 								    
 								    LOTRItemBow.applyBowModifiers(arrow, stack); 
-								    npc.playSound("random.bow", 1.0F, 1.0F / (npc.getRNG().nextFloat() * 0.4F + 0.8F));
+								    npc.playSound("random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 								    
 								    setupProjectileVelocity(arrow, target, speed, 0.99F, 0.05F, accuracy);
+								    
+								    if(gHiredsCriticalProjectileChance > 0F && rand.nextFloat() <= gHiredsCriticalProjectileChance) {
+								    	arrow.setIsCritical(true);
+								    }
+								    
 								    world.spawnEntityInWorld(arrow);
 									return;
 								}
@@ -697,6 +726,12 @@ public class CustomRanged {
 		
 		// default attack
 		entity.attackEntityWithRangedAttack(target, power);
+	}
+	
+	public static void setCriticalByChance(LOTREntityProjectileBase entity, Random rand) {
+		if(gHiredsCriticalProjectileChance > 0F && rand.nextFloat() <= gHiredsCriticalProjectileChance) {
+			entity.setIsCritical(true);
+	    }
 	}
 
 	
@@ -716,9 +751,7 @@ public class CustomRanged {
 					// 50 = 50% durability
 					// 1 = ~0.01 damage (random)
 		
-		if(ASMConfig.guardsEquipDurabilityMode == 0) {
-			return true;
-		}
+		if(ASMConfig.guardsEquipDurabilityMode == 0) return true;
 		
 		if(ASMConfig.guardsEquipDurabilityMode != 1 && category == ddr.category) {
 			return true;

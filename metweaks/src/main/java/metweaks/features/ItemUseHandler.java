@@ -2,8 +2,8 @@ package metweaks.features;
 
 import java.util.List;
 
+import lotr.common.LOTRMod;
 import lotr.common.LOTRSquadrons;
-import lotr.common.content.LOTRItems;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRHiredNPCInfo.Task;
@@ -29,11 +29,12 @@ public class ItemUseHandler {
 	public static final int TURN_OFF_GUARDMODE = 5;
 	
 	public static void handleItemUseStart(PlayerUseItemEvent.Start event) {
-		if(event.item.getItem() == LOTRItems.commandHorn && event.entityPlayer.isSneaking()) {
-			int meta = event.item.getItemDamage();
+		ItemStack item = event.item;
+		if(item != null && item.getItem() == LOTRMod.commandHorn && event.entityPlayer.isSneaking()) {
+			int meta = item.getItemDamage();
 			if(meta == TURN_ON_GUARDMODE || meta == TURN_OFF_GUARDMODE) {
 				if(event.entityPlayer.worldObj.isRemote) {
-					MeTweaks.proxy.openGuiGuardmodeHorn(event.item);
+					MeTweaks.proxy.openGuiGuardmodeHorn(item);
 				}
 				event.setCanceled(true);
 			}
@@ -42,17 +43,19 @@ public class ItemUseHandler {
 	
 	public static void handleItemUseFinish(PlayerUseItemEvent.Finish event) {
 		ItemStack stack = event.item;
+		
+		if(stack == null) return;
+		
 		if(ASMConfig.patchDraughtUse) {
 			Item food = stack.getItem();
 			boolean mug = MeTweaks.lotr && food instanceof LOTRItemMug;
-			boolean onlyFood = food == Items.mushroom_stew || (MeTweaks.lotr && (food == LOTRItems.rabbitStew || food == LOTRItems.torogStew || food == LOTRItems.melonSoup || food == LOTRItems.leekSoup));
+			boolean onlyFood = food == Items.mushroom_stew || (MeTweaks.lotr && (food == LOTRMod.rabbitStew || food == LOTRMod.torogStew || food == LOTRMod.melonSoup || food == LOTRMod.leekSoup));
 			if(mug || onlyFood || (MeTweaks.lotr && food instanceof LOTRItemEntDraught)) {
 				EntityPlayer player = event.entityPlayer;
 				if((stack.stackSize > (onlyFood ? 0 : 1)) && !player.capabilities.isCreativeMode) {
 					// stacksize is already done for food
-					if(!onlyFood) {
+					if(!onlyFood)
 						stack.stackSize--;
-					}
 					ItemStack empty = new ItemStack(mug ? LOTRItemMug.getVessel(stack).getEmptyVesselItem() : Items.bowl);
 					// attempt to add new stack to inv
 					if(!player.inventory.addItemStackToInventory(empty)) {
@@ -64,10 +67,10 @@ public class ItemUseHandler {
 			}
 		}
 		
-		if(MeTweaks.lotr && MeTweaksConfig.toggleGuardModeHorn && event.item.getItem() == LOTRItems.commandHorn && !event.entityPlayer.worldObj.isRemote) {
-			int meta = event.item.getItemDamage();
+		if(MeTweaks.lotr && MeTweaksConfig.toggleGuardModeHorn && stack.getItem() == LOTRMod.commandHorn && !event.entityPlayer.worldObj.isRemote) {
+			int meta = stack.getItemDamage();
 			if(meta ==TURN_ON_GUARDMODE || meta == TURN_OFF_GUARDMODE) {
-				ItemStack item = event.item.copy();
+				ItemStack item = stack.copy();
 				String state;
 				if(meta == TURN_ON_GUARDMODE) {
 					item.setItemDamage(TURN_OFF_GUARDMODE);
@@ -85,11 +88,10 @@ public class ItemUseHandler {
 				
 				
 				
-				if(inv.getStackInSlot(inv.currentItem).getItem() == LOTRItems.commandHorn) {
+				if(inv.getStackInSlot(inv.currentItem).getItem() == LOTRMod.commandHorn)
 					inv.setInventorySlotContents(inv.currentItem, item);
-				} else {
+				else
 					System.out.println("no command horn!");
-				}
 				
 			}
 			

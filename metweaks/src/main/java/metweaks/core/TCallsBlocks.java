@@ -1,46 +1,11 @@
 package metweaks.core;
 
-import static metweaks.core.ClassTransformer.coreprefix;
-import static metweaks.core.ClassTransformer.log;
-import static metweaks.core.ClassTransformer.obf;
-import static org.objectweb.asm.Opcodes.AALOAD;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ARETURN;
-import static org.objectweb.asm.Opcodes.ARRAYLENGTH;
-import static org.objectweb.asm.Opcodes.ASTORE;
-import static org.objectweb.asm.Opcodes.BIPUSH;
-import static org.objectweb.asm.Opcodes.FLOAD;
-import static org.objectweb.asm.Opcodes.F_SAME;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.IADD;
-import static org.objectweb.asm.Opcodes.ICONST_3;
-import static org.objectweb.asm.Opcodes.IFEQ;
-import static org.objectweb.asm.Opcodes.IF_ICMPLT;
-import static org.objectweb.asm.Opcodes.IF_ICMPNE;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.IOR;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.ISTORE;
-import static org.objectweb.asm.Opcodes.POP;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FrameNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+
+import static metweaks.core.ClassTransformer.*;
+import org.objectweb.asm.tree.*;
 
 public class TCallsBlocks {
 	static void transformItemSlab(ClassNode classNode) {
@@ -183,6 +148,7 @@ public class TCallsBlocks {
      	for(MethodNode method : classNode.methods) {
      		if((method.name.equals(name) && method.desc.equals(desc))) {
      			method.instructions.clear();
+     			method.localVariables.clear();
      			InsnList list = new InsnList();
     	    	list.add(new VarInsnNode(ILOAD, 5)); // side
     	    	list.add(new VarInsnNode(FLOAD, 7)); // hitY
@@ -282,9 +248,8 @@ public class TCallsBlocks {
       					}
       				}
 
-      				if(LOC_end_clone == node) {
-						break;
-					}
+      				if(LOC_end_clone == node)
+      					break;
       			}
       			
       			if(list.size() == 0) {
@@ -345,9 +310,8 @@ public class TCallsBlocks {
 	protected String[] names;
 	
 	public String getBlockName(int meta) {
-		if(meta >= names.length) {
+		if(meta >= names.length)
 			return String.valueOf(meta);
-		}
 		return this.names[meta];
 	}
 	
@@ -404,5 +368,127 @@ public class TCallsBlocks {
      			return;
      		}
         }
+	}
+	
+	static void transformLOTRTileEntityAlloyForgeBase(ClassNode classNode) {
+		for(MethodNode method : classNode.methods) {
+			if(method.name.equals("getSmeltingResult") && method.desc.equals("(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;")) {
+				for(AbstractInsnNode node : method.instructions.toArray()) {
+					// after if(MinecraftServer.getServer() != null)
+					if(node.getOpcode() == IFNE) {
+						AbstractInsnNode prev = node.getPrevious();
+						if(prev.getOpcode() == ILOAD && ((VarInsnNode) prev).var == 2) { // isStoneMaterial
+							JumpInsnNode jump = (JumpInsnNode) node;
+							InsnList list = new InsnList();
+							list.add(new VarInsnNode(ALOAD, 1)); // itemstack
+							list.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(Hooks.class), "canAlloySmelt", "(Lnet/minecraft/item/ItemStack;)Z", false));
+							list.add(new JumpInsnNode(IFNE, jump.label));
+							method.instructions.insert(node, list);
+							log.info(coreprefix+": Patched LOTRTileEntityAlloyForgeBase.getSmeltingResult()");
+							return;
+						}
+					}
+				}
+				
+			}
+		}
+		
+		
+	}
+	
+	static void transformLoader(ClassNode classNode) {
+		for(MethodNode method : classNode.methods) {
+			if(method.name.equals("fireMissingMappingEvent") && method.desc.equals("(Ljava/util/LinkedHashMap;ZLcpw/mods/fml/common/registry/GameData;Ljava/util/Map;)Ljava/util/List;")) {
+				for(AbstractInsnNode node : method.instructions.toArray()) {
+					if(node.getOpcode() == ASTORE && ((VarInsnNode) node).var == 9) { // missingEvent
+						InsnList list = new InsnList();
+						list.add(new VarInsnNode(ALOAD, 3)); // new gameData
+						list.add(new FieldInsnNode(PUTSTATIC, Type.getInternalName(Hooks.class), "temp_gameData", "Lcpw/mods/fml/common/registry/GameData;"));
+						method.instructions.insert(node, list);
+						log.info(coreprefix+": Patched Loader.fireMissingMappingEvent()");
+						return;
+					}
+					
+				}
+				
+			}
+		}
+		
+		
+	}
+	
+	static void transformCTMRenderer(ClassNode classNode) {
+		for(MethodNode method : classNode.methods) {
+			if(method.name.equals("renderInventoryBlock") && method.desc.equals("(Lnet/minecraft/block/Block;IILnet/minecraft/client/renderer/RenderBlocks;)V")) {
+				InsnList list = new InsnList();
+				list.add(new VarInsnNode(ALOAD, 1)); // block
+				list.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(Hooks.class), "preRenderInvCTM", "(Lnet/minecraft/block/Block;)V", false));
+				method.instructions.insert(list);
+				log.info(coreprefix+": Patched CTMRenderer.renderInventoryBlock()");
+				return;
+			}
+		}
+	}
+	
+	static void transformLOTRBlockChandelier(ClassNode classNode) {
+		for(MethodNode method : classNode.methods) {
+			if(method.name.equals(obf ? "func_149718_j" : "canBlockStay") && method.desc.equals("(Lnet/minecraft/world/World;III)Z")) {
+				
+				for(AbstractInsnNode node : method.instructions.toArray()) {
+					if(node.getOpcode() == INSTANCEOF && ((TypeInsnNode) node).desc.equals("lotr/common/block/LOTRBlockOrcChain")) {
+						JumpInsnNode jumpnode = (JumpInsnNode) node.getNext();
+						InsnList list = new InsnList();
+						list.add(new VarInsnNode(ALOAD, 5)); // block
+						list.add(new VarInsnNode(ILOAD, 6)); // meta
+						list.add(new MethodInsnNode(INVOKESTATIC, Type.getInternalName(Hooks.class), "canChandelierStay", "(Lnet/minecraft/block/Block;I)Z", false));
+						LabelNode label = new LabelNode();
+						list.add(new JumpInsnNode(IFEQ, label));
+						list.add(new InsnNode(ICONST_1));
+						list.add(new InsnNode(IRETURN));
+						list.add(label);
+						/*ALOAD 5
+					    INSTANCEOF lotr/common/block/LOTRBlockOrcChain
+					    IFEQ L9
+					    ICONST_1
+					    IRETURN
+					   L9*/
+						
+						method.instructions.insert(jumpnode.label.getNext(), list);
+						log.info(coreprefix+": Patched LOTRBlockChandelier.canBlockStay()");
+						return;
+					}
+				}
+			}
+		}
+		
+		
+	}
+	
+	static void transformBlockFire(ClassNode classNode) {
+		for(MethodNode method : classNode.methods) {
+			if(method.name.equals(obf ? "a" : "updateTick") && method.desc.equals(obf ? "(Lahb;IIILjava/util/Random;)V" : "(Lnet/minecraft/world/World;IIILjava/util/Random;)V")) {
+				
+				for(AbstractInsnNode node : method.instructions.toArray()) {
+					if(node.getOpcode() == INVOKEVIRTUAL) {
+						MethodInsnNode mnode = (MethodInsnNode) node;
+						if(mnode.name.equals(obf ? "a" : "getBlock") && mnode.desc.equals(obf ? "(III)Laji;" : "(III)Lnet/minecraft/block/Block;") && mnode.owner.equals(obf ? "ahb" : "net/minecraft/world/World")) {
+							LabelNode label = new LabelNode();
+							InsnList list = new InsnList();
+							list.add(new InsnNode(DUP)); // duplicate block on stack
+							list.add(new FieldInsnNode(GETSTATIC, "lotr/common/LOTRMod", "hearth", "Lnet/minecraft/block/Block;"));
+							list.add(new JumpInsnNode(IF_ACMPNE, label));
+							
+							list.add(new InsnNode(RETURN));
+							list.add(label);
+							method.instructions.insert(node, list);
+							log.info(coreprefix+": Patched BlockFire.updateTick()");
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		
 	}
 }
