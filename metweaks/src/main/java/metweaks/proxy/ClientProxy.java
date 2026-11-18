@@ -14,16 +14,16 @@ import metweaks.client.gui.GuiUnitCountsOverlay;
 import metweaks.client.gui.TosNoticeReader;
 import metweaks.client.gui.config.GuiConfigConfirm;
 import metweaks.client.healthbar.HealthBarConfig;
-import metweaks.command.ClientCommandTOSNotice;
 import metweaks.command.ClientCommandDebug;
 import metweaks.command.ClientCommandFarView;
+import metweaks.command.ClientCommandTOSNotice;
 import metweaks.events.ClientEvents;
 import metweaks.events.GuardEvents;
 import metweaks.guards.customranged.CustomRanged;
 import metweaks.network.HiredAdvInfoPacket;
 import metweaks.network.SyncedConfig;
-import metweaks.physics.RenderPhysicsEntityFast;
 import metweaks.physics.PhysicsEntity;
+import metweaks.physics.RenderPhysicsEntityFast;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.ClientCommandHandler;
 

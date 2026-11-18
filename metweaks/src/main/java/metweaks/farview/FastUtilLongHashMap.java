@@ -1,11 +1,9 @@
 package metweaks.farview;
 
-import net.minecraft.util.LongHashMap;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.util.LongHashMap;
 
 public class FastUtilLongHashMap extends LongHashMap {
 

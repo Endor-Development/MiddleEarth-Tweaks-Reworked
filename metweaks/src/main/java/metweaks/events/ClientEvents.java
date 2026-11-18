@@ -1,7 +1,11 @@
 package metweaks.events;
 
+import static metweaks.client.healthbar.HealthBarConfig.prevRenderHealth;
+import static metweaks.client.healthbar.HealthBarConfig.renderHealth;
+
 import java.lang.reflect.Field;
 import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -20,13 +24,13 @@ import metweaks.ASMConfig;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
 import metweaks.block.VerticalSlab;
-import metweaks.client.healthbar.RenderHealthBar;
 import metweaks.client.Keys;
 import metweaks.client.LOTRGuiElements;
 import metweaks.client.gui.GuiTOSNotice;
 import metweaks.client.gui.GuiTabListOverlay;
 import metweaks.client.gui.GuiUnitCountsOverlay;
 import metweaks.client.gui.unitoverview.GuiUnitOverview;
+import metweaks.client.healthbar.RenderHealthBar;
 import metweaks.core.HooksNetwork;
 import metweaks.features.Getters;
 import metweaks.features.ItemUseHandler;
@@ -60,15 +64,14 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import static metweaks.client.healthbar.HealthBarConfig.*;
 
 public class ClientEvents {
 	

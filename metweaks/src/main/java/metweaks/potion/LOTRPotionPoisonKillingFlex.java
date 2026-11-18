@@ -2,8 +2,8 @@ package metweaks.potion;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import lotr.common.LOTRDamage;
 import lotr.common.LOTRMod;
+import lotr.common.content.LOTRDamage;
 import lotr.common.item.LOTRPoisonedDrinks;
 import lotr.common.item.LOTRPotionPoisonKilling;
 import metweaks.MeTweaks;

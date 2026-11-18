@@ -3,11 +3,11 @@ package metweaks.features;
 import java.util.List;
 
 import cpw.mods.fml.common.FMLLog;
-import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRPlayerData;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.fac.LOTRFaction;
+import lotr.common.world.LOTRDimension;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.map.LOTRConquestGrid;
 import lotr.common.world.map.LOTRConquestZone;

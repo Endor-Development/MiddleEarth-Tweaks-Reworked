@@ -1,7 +1,7 @@
 package metweaks.features;
 
 import lotr.common.entity.npc.LOTRBannerBearer;
-import lotr.common.entity.npc.LOTREntitySouthronChampion;
+import lotr.common.entity.npc.nearharad.LOTREntitySouthronChampion;
 import lotr.common.item.LOTRItemBanner.BannerType;
 import net.minecraft.world.World;
 

@@ -1,13 +1,71 @@
 package metweaks.core;
 
-import static metweaks.ASMConfig.*;
-import net.minecraft.launchwrapper.IClassTransformer;
+import static metweaks.ASMConfig.adventureModePatches;
+import static metweaks.ASMConfig.aiRangedImprovements;
+import static metweaks.ASMConfig.allyConquestSpawns;
+import static metweaks.ASMConfig.allyKillReduceConquest;
+import static metweaks.ASMConfig.armorMaintainProtectionPercent;
+import static metweaks.ASMConfig.bannerProtectionPatches;
+import static metweaks.ASMConfig.barkblocks;
+import static metweaks.ASMConfig.conquestDecay;
+import static metweaks.ASMConfig.draughtStackEffectsIncrease;
+import static metweaks.ASMConfig.earlyPacketProcessing;
+import static metweaks.ASMConfig.entityPosRotationThreshold;
+import static metweaks.ASMConfig.entityTrackerPatches;
+import static metweaks.ASMConfig.etFuturumCompatibility;
+import static metweaks.ASMConfig.experimentalFeatures;
+import static metweaks.ASMConfig.explosionPhysics;
+import static metweaks.ASMConfig.fangornTreePenaltyThreshold;
+import static metweaks.ASMConfig.farView;
+import static metweaks.ASMConfig.fellowshipFFPatches;
+import static metweaks.ASMConfig.fencegatePlacement;
+import static metweaks.ASMConfig.fixFireworkLag;
+import static metweaks.ASMConfig.fixInvisibility;
+import static metweaks.ASMConfig.fixServerJoinFreeze;
+import static metweaks.ASMConfig.fixSluggishHaradAttack;
+import static metweaks.ASMConfig.fixTeleportToHiringPlayer;
+import static metweaks.ASMConfig.foodConsumeDurations;
+import static metweaks.ASMConfig.guardsEquipRanged;
+import static metweaks.ASMConfig.guardsSyncSettings;
+import static metweaks.ASMConfig.guardsWanderRange;
+import static metweaks.ASMConfig.hearthFireDoesntSpread;
+import static metweaks.ASMConfig.hireableEnts;
+import static metweaks.ASMConfig.hiredsConquerForTheirFaction;
+import static metweaks.ASMConfig.horseinv;
+import static metweaks.ASMConfig.improveBlockBreakSpeeds;
+import static metweaks.ASMConfig.interactReachFix;
+import static metweaks.ASMConfig.lotrHolidays;
+import static metweaks.ASMConfig.lotrHudPositions;
+import static metweaks.ASMConfig.moreEvents;
+import static metweaks.ASMConfig.moreMountedBannerBearers;
+import static metweaks.ASMConfig.mountedBannerBearers;
+import static metweaks.ASMConfig.mutePlayerDetailsApiSpam;
+import static metweaks.ASMConfig.noTCPDelay;
+import static metweaks.ASMConfig.passMissingDiscriminator;
+import static metweaks.ASMConfig.patchDraughtUse;
+import static metweaks.ASMConfig.prioritizePlayerTicks;
+import static metweaks.ASMConfig.projectilePatches;
+import static metweaks.ASMConfig.projectilePatchesReqClient;
+import static metweaks.ASMConfig.renderPerformance;
+import static metweaks.ASMConfig.revengeCamouflageTargetChance;
+import static metweaks.ASMConfig.smoothEntityMovement;
+import static metweaks.ASMConfig.smoothHeadYawMovement;
+import static metweaks.ASMConfig.syncedconfig;
+import static metweaks.ASMConfig.tauredainPoisonDartChance;
+import static metweaks.ASMConfig.throwableSpearToggle;
+import static metweaks.ASMConfig.trapdoorPlacement;
+import static metweaks.ASMConfig.unlockEnemyWaypoints;
+import static metweaks.ASMConfig.versionCompat;
+import static metweaks.ASMConfig.verticalSlabPlacement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.common.FMLLog;
+import net.minecraft.launchwrapper.IClassTransformer;
 
 public class ClassTransformer implements IClassTransformer {
 	static final String coreprefix = "MT-Core";

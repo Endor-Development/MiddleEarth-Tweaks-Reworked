@@ -13,8 +13,8 @@ import java.util.Set;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
+import lotr.common.world.LOTRDimension;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.spawning.LOTRBiomeInvasionSpawns;
 import lotr.common.world.spawning.LOTREventSpawner;

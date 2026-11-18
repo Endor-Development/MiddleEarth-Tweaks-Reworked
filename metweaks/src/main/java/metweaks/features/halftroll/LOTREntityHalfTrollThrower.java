@@ -1,9 +1,9 @@
 package metweaks.features.halftroll;
 
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
-import lotr.common.entity.npc.LOTREntityHalfTrollWarrior;
-import lotr.common.entity.npc.LOTREntityMountainTroll;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.angmar.LOTREntityMountainTroll;
+import lotr.common.entity.npc.farharad.LOTREntityHalfTrollWarrior;
 import lotr.common.entity.projectile.LOTREntityThrownRock;
 import metweaks.guards.customranged.CustomRanged;
 import net.minecraft.entity.EntityLivingBase;

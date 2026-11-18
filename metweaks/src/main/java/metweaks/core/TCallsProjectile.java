@@ -1,19 +1,54 @@
 package metweaks.core;
 
-import static org.objectweb.asm.Opcodes.*;
-
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Type;
-
-import static metweaks.core.ClassTransformer.*;
 import static metweaks.ASMConfig.entityPosRotationThreshold;
 import static metweaks.ASMConfig.entityTrackerPatches;
 import static metweaks.ASMConfig.farView;
 import static metweaks.ASMConfig.projectilePatches;
 import static metweaks.ASMConfig.projectilePatchesReqClient;
-import static metweaks.core.ClassHandler.*;
+import static metweaks.core.ClassHandler.isMethod;
+import static metweaks.core.ClassHandler.lastBackwards;
+import static metweaks.core.ClassTransformer.coreprefix;
+import static metweaks.core.ClassTransformer.log;
+import static metweaks.core.ClassTransformer.obf;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.DLOAD;
+import static org.objectweb.asm.Opcodes.FLOAD;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
+import static org.objectweb.asm.Opcodes.GOTO;
+import static org.objectweb.asm.Opcodes.ICONST_1;
+import static org.objectweb.asm.Opcodes.ICONST_4;
+import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.IFNE;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INSTANCEOF;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
 
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
+
 import metweaks.ASMConfig;
 import metweaks.farview.METChunkProviderClient;
 

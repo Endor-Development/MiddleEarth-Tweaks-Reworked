@@ -1,11 +1,12 @@
 package metweaks.command;
 
 import java.util.List;
+
 import lotr.common.world.biome.LOTRBiome;
+import lotr.common.world.spawning.LOTREventSpawner.EventChance;
 import lotr.common.world.spawning.LOTRInvasions;
 import metweaks.features.LOTREventControl;
 import metweaks.features.LOTREventControl.EventData;
-import lotr.common.world.spawning.LOTREventSpawner.EventChance;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

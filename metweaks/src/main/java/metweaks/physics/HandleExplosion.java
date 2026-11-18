@@ -11,7 +11,7 @@ import lotr.common.LOTRBannerProtection.IFilter;
 import lotr.common.LOTRConfig;
 import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityNPC;
-import lotr.common.entity.npc.LOTREntityWargBombardier;
+import lotr.common.entity.npc.base.LOTREntityWargBombardier;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
 import metweaks.core.HooksPhysics;

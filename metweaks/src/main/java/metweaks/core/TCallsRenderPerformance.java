@@ -1,9 +1,16 @@
 package metweaks.core;
 
-import static org.objectweb.asm.Opcodes.*;
+import static metweaks.core.ClassTransformer.coreprefix;
+import static metweaks.core.ClassTransformer.log;
+import static metweaks.core.ClassTransformer.obf;
+import static org.objectweb.asm.Opcodes.ICONST_0;
+import static org.objectweb.asm.Opcodes.ICONST_1;
+import static org.objectweb.asm.Opcodes.IRETURN;
 
-import static metweaks.core.ClassTransformer.*;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 public class TCallsRenderPerformance {
 

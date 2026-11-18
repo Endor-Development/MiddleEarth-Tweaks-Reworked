@@ -2,11 +2,11 @@ package metweaks.features;
 
 import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityHorse;
-import lotr.common.entity.npc.LOTREntityRohanBannerBearer;
-import lotr.common.entity.npc.LOTREntityRohirrimArcher;
 import lotr.common.entity.npc.LOTREntityRohirrimWarrior;
 import lotr.common.entity.npc.LOTRUnitTradeEntries;
 import lotr.common.entity.npc.LOTRUnitTradeEntry;
+import lotr.common.entity.npc.rohan.LOTREntityRohanBannerBearer;
+import lotr.common.entity.npc.rohan.LOTREntityRohirrimArcher;
 
 public class MountedBannerBearers {
 	public static void setup() {

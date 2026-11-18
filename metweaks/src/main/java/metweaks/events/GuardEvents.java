@@ -2,16 +2,17 @@ package metweaks.events;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import lotr.client.gui.LOTRGuiButtonOptions;
 import lotr.client.gui.LOTRGuiHiredFarmer;
 import lotr.client.gui.LOTRGuiHiredInteract;
 import lotr.client.gui.LOTRGuiHiredNPC;
 import lotr.client.gui.LOTRGuiHornSelect;
 import lotr.client.gui.LOTRGuiNPCInteract;
+import lotr.client.gui.button.LOTRGuiButtonOptions;
 import lotr.common.entity.npc.LOTREntityNPC;
 import metweaks.ASMConfig;
 import metweaks.MeTweaks;

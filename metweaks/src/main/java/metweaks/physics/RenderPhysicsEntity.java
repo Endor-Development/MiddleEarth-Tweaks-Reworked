@@ -1,5 +1,7 @@
 package metweaks.physics;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.client.Minecraft;
@@ -12,7 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 public class RenderPhysicsEntity extends Render {
     private final static RenderBlocks renderBlocks = new RenderBlocks();

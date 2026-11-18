@@ -1,10 +1,5 @@
 package metweaks.farview;
 
-import lotr.common.LOTRDimension;
-import lotr.common.world.biome.variant.LOTRBiomeVariantStorage;
-import metweaks.MeTweaks;
-import metweaks.farview.METLongHashSet.KeyNode;
-
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -12,6 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import lotr.common.world.LOTRDimension;
+import lotr.common.world.biome.variant.LOTRBiomeVariantStorage;
+import metweaks.MeTweaks;
+import metweaks.farview.METLongHashSet.KeyNode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -28,12 +32,6 @@ import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class METChunkProviderClient implements IChunkProvider {
 	public static final Logger logger = LogManager.getLogger();

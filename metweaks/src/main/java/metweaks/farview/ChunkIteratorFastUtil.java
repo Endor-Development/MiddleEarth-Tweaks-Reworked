@@ -1,6 +1,5 @@
 package metweaks.farview;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.world.World;

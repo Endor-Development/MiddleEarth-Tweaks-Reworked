@@ -2,6 +2,7 @@ package metweaks.client.gui.unitoverview;
 
 import java.util.Arrays;
 import java.util.Collections;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -16,8 +17,8 @@ import lotr.common.network.LOTRPacketHiredUnitCommand;
 import lotr.common.network.LOTRPacketHiredUnitInteract;
 import lotr.common.network.LOTRPacketNPCSquadron;
 import metweaks.MeTweaks;
-import metweaks.client.healthbar.HealthBarConfig;
 import metweaks.client.gui.unitoverview.GuiUnitList.Entry;
+import metweaks.client.healthbar.HealthBarConfig;
 import metweaks.events.ClientEvents;
 import metweaks.events.GuardEvents;
 import metweaks.network.GuardsOverviewActionPacket;
@@ -25,9 +26,9 @@ import metweaks.network.GuardsOverviewPacket;
 import metweaks.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;

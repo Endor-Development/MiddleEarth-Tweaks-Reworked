@@ -1,7 +1,7 @@
 package metweaks.features;
 
 import lotr.common.entity.npc.LOTRBannerBearer;
-import lotr.common.entity.npc.LOTREntityEasterlingGoldWarrior;
+import lotr.common.entity.npc.easterling.LOTREntityEasterlingGoldWarrior;
 import lotr.common.item.LOTRItemBanner.BannerType;
 import net.minecraft.world.World;
 
