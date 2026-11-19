@@ -1,6 +1,6 @@
 package metweaks.features;
 
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRItems;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTRUnitTradeEntries;
@@ -41,10 +41,10 @@ public class MoreMountedBannerBearers {
 			new LOTRUnitTradeEntry(LOTREntityNearHaradrimWarrior.class, 30, 0.0F), 
 			new LOTRUnitTradeEntry(LOTREntityNearHaradrimArcher.class, 50, 50.0F), 
 			new LOTRUnitTradeEntry(LOTREntitySouthronChampion.class, LOTREntityHorse.class, "SouthronChampion_Horse", 60, 100.0F)
-				.setMountArmor(LOTRMod.horseArmorNearHarad).setPledgeExclusive(), 
+				.setMountArmor(LOTRItems.horseArmorNearHarad).setPledgeExclusive(), 
 			new LOTRUnitTradeEntry(LOTREntityNearHaradBannerBearer.class, 50, 150.0F),
 			new LOTRUnitTradeEntry(LOTREntitySouthronChampionBannerBearer.class, LOTREntityHorse.class, "SouthronChampionBanner_Horse", 100, 200.0F)
-				.setMountArmor(LOTRMod.horseArmorNearHarad).setPledgeExclusive(), 
+				.setMountArmor(LOTRItems.horseArmorNearHarad).setPledgeExclusive(), 
 		});
 		
 		
@@ -64,11 +64,11 @@ public class MoreMountedBannerBearers {
 		        new LOTRUnitTradeEntry(LOTREntityEasterlingWarrior.class, LOTREntityHorse.class, "EasterlingWarrior_Horse", 50, 150.0F), 
 		        new LOTRUnitTradeEntry(LOTREntityEasterlingArcher.class, LOTREntityHorse.class, "EasterlingArcher_Horse", 70, 200.0F), 
 		        new LOTRUnitTradeEntry(LOTREntityEasterlingGoldWarrior.class, LOTREntityHorse.class, "EasterlingGoldWarrior_Horse", 70, 300.0F)
-		        	.setMountArmor(LOTRMod.horseArmorRhunGold).setPledgeExclusive(), 
+		        	.setMountArmor(LOTRItems.horseArmorRhunGold).setPledgeExclusive(), 
 		        new LOTRUnitTradeEntry(LOTREntityEasterlingFireThrower.class, 60, 150.0F), 
 		        new LOTRUnitTradeEntry(LOTREntityEasterlingBannerBearer.class, 50, 200.0F),
 		        new LOTRUnitTradeEntry(LOTREntityEasterlingGoldWarriorBannerBearer.class, LOTREntityHorse.class, "EasterlingGoldWarriorBanner_Horse", 110, 400.0F)
-	        		.setMountArmor(LOTRMod.horseArmorRhunGold).setPledgeExclusive(), 
+	        		.setMountArmor(LOTRItems.horseArmorRhunGold).setPledgeExclusive(), 
 		 });
 		  
 		  

@@ -29,10 +29,12 @@ import lotr.common.entity.npc.dwarf.LOTREntityBlueDwarfAxeThrower;
 import lotr.common.entity.npc.dwarf.LOTREntityDwarfAxeThrower;
 import lotr.common.entity.npc.easterling.LOTREntityEasterlingArcher;
 import lotr.common.entity.npc.farharad.LOTREntityTauredainBlowgunner;
+import lotr.common.entity.npc.gondor.anorien.LOTREntityAnorienArcher;
 import lotr.common.entity.npc.gondor.blackrootVale.LOTREntityBlackrootArcher;
 import lotr.common.entity.npc.gondor.dolEnErnil.LOTREntityDolAmrothArcher;
 import lotr.common.entity.npc.gondor.ithilien.LOTREntityRangerIthilien;
 import lotr.common.entity.npc.gondor.ithilien.LOTREntityRangerIthilienBannerBearer;
+import lotr.common.entity.npc.gondor.lamedon.LOTREntityLamedonAxeThrower;
 import lotr.common.entity.npc.gondor.lossarnach.LOTREntityLossarnachAxeman;
 import lotr.common.entity.npc.gondor.lossarnach.LOTREntityLossarnachBannerBearer;
 import lotr.common.entity.npc.gundabad.LOTREntityGundabadOrcArcher;
@@ -109,13 +111,13 @@ public class GuardsOverviewPacket implements IMessage {
 		rangedOnly.add(LOTREntityDunlendingAxeThrower.class);
 		rangedOnly.add(LOTREntityDwarfAxeThrower.class);
 		rangedOnly.add(LOTREntityEasterlingArcher.class);
-		rangedOnly.add(LOTREntityGondorArcher.class);
+		rangedOnly.add(LOTREntityAnorienArcher.class);
 		rangedOnly.add(LOTREntityGulfHaradArcher.class);
 		rangedOnly.add(LOTREntityGundabadOrcArcher.class);
 		rangedOnly.add(LOTREntityGundabadUrukArcher.class);
 		rangedOnly.add(LOTREntityHarnedorArcher.class);
 		rangedOnly.add(LOTREntityIsengardSnagaArcher.class);
-		rangedOnly.add(LOTREntityLamedonArcher.class);
+		rangedOnly.add(LOTREntityLamedonAxeThrower.class);
 		rangedOnly.add(LOTREntityMordorOrcArcher.class);
 		rangedOnly.add(LOTREntityTauredainBlowgunner.class);
 		rangedOnly.add(LOTREntityUrukHaiCrossbower.class);
@@ -259,7 +261,8 @@ public class GuardsOverviewPacket implements IMessage {
 	}
 	
 	public static class Handler implements IMessageHandler<GuardsOverviewPacket, IMessage> {
-	    public IMessage onMessage(GuardsOverviewPacket packet, MessageContext context) {
+	    @Override
+		public IMessage onMessage(GuardsOverviewPacket packet, MessageContext context) {
 	    	TIntObjectMap<ItemStack[]> map = packet.inventories;
 	    	if(map.size() == 1 && GuiUnitOverview.inventories != null) {
 	    		int entityID = map.keys()[0];

@@ -19,7 +19,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRItems;
 import metweaks.ASMConfig;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
@@ -129,15 +129,19 @@ public class ClientEvents {
     public void onItemTooltip(ItemTooltipEvent event) {
 		
 		if(MeTweaksConfig.verticalSlabs && event.itemStack.getItem() instanceof ItemSlab) {
-			if(translateVerticalSlabTip == null) translateVerticalSlabTip = EnumChatFormatting.GRAY+StatCollector.translateToLocalFormatted("metweaks.verticalslabs.tooltip", GameSettings.getKeyDisplayString(Keys.toggleVertical.getKeyCode()));
+			if(translateVerticalSlabTip == null) {
+				translateVerticalSlabTip = EnumChatFormatting.GRAY+StatCollector.translateToLocalFormatted("metweaks.verticalslabs.tooltip", GameSettings.getKeyDisplayString(Keys.toggleVertical.getKeyCode()));
+			}
 			event.toolTip.add(1, translateVerticalSlabTip); // EnumChatFormatting.GRAY+"Press "+GameSettings.getKeyDisplayString(Keys.toggleVertical.getKeyCode())+" for vertical"
 		}
 			
-		if(MeTweaksConfig.toggleGuardModeHorn && MeTweaks.lotr && event.itemStack.getItem() == LOTRMod.commandHorn) {
+		if(MeTweaksConfig.toggleGuardModeHorn && MeTweaks.lotr && event.itemStack.getItem() == LOTRItems.commandHorn) {
 			
 			int meta = event.itemStack.getItemDamage();
 			if(meta == ItemUseHandler.TURN_ON_GUARDMODE || meta == ItemUseHandler.TURN_OFF_GUARDMODE) {
-				if(translateGuardHornTip == null) translateGuardHornTip = EnumChatFormatting.GOLD+StatCollector.translateToLocal("gui.guardmodehorn.tip");
+				if(translateGuardHornTip == null) {
+					translateGuardHornTip = EnumChatFormatting.GOLD+StatCollector.translateToLocal("gui.guardmodehorn.tip");
+				}
 				event.toolTip.add(1, translateGuardHornTip); // EnumChatFormatting.GOLD+"[Rightclick + Sneak] for settings"
 			}
 				
@@ -191,7 +195,9 @@ public class ClientEvents {
 			
 		}
 		
-		if(saveConf) MeTweaksConfig.config.save(); // we rely on mark dirty?
+		if(saveConf) {
+			MeTweaksConfig.config.save(); // we rely on mark dirty?
+		}
 		
 		if(MeTweaks.lotr && MeTweaksConfig.fixMountsRunningAway) {
 			PlayerRidingTracker.map.clear();
@@ -210,7 +216,9 @@ public class ClientEvents {
 			return;
 		}
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if(player == null) return;
+		if(player == null) {
+			return;
+		}
 		
 		FMLLog.getLogger().info(player.getCommandSenderName()+" logget out in "+player.worldObj.provider.getDimensionName()+" at "+MathHelper.floor_double(player.posX)+" "+MathHelper.floor_double(player.posY)+" "+MathHelper.floor_double(player.posZ));
 	}
@@ -231,8 +239,9 @@ public class ClientEvents {
 				
 				
 				if(!mc.isSingleplayer()) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						FMLLog.getLogger().info("send status to server: vertical="+state);
+					}
 					
 					NetworkHandler.networkWrapper.sendToServer(new SyncVerticalModePacket(state));
 					
@@ -251,8 +260,9 @@ public class ClientEvents {
 				
 				
 				if(!mc.isSingleplayer()) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						FMLLog.getLogger().info("send status to server: throwablespear="+state);
+					}
 					
 					NetworkHandler.networkWrapper.sendToServer(new SyncThrowableSpearPacket(state));
 					
@@ -283,8 +293,9 @@ public class ClientEvents {
 				UnitMonitor.setUnitTrackingMode(mc.thePlayer, state);
 				
 				if(!mc.isSingleplayer()) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						FMLLog.getLogger().info("send status to server: unittracking="+state);
+					}
 					NetworkHandler.networkWrapper.sendToServer(new SyncUnitTrackingModePacket(state));
 				}
 				
@@ -296,8 +307,9 @@ public class ClientEvents {
 			}
 			else if(ASMConfig.unitOverview) {
 				Minecraft.getMinecraft().displayGuiScreen(new GuiUnitOverview());
-				if(MeTweaks.remotePresent)
+				if(MeTweaks.remotePresent) {
 					NetworkHandler.networkWrapper.sendToServer(new GuardsOverviewActionPacket(-1, GuardsOverviewActionPacket.ACTION_SEND_DATA));
+				}
 			}
 		}
 	}
@@ -345,8 +357,9 @@ public class ClientEvents {
 		
 		if(stateTime > 0 && event.phase == Phase.END) {
 			
-			if(field_remainingHighlightTicks == null)
+			if(field_remainingHighlightTicks == null) {
 				field_remainingHighlightTicks = ReflectionHelper.findField(GuiIngame.class, new String[] {"remainingHighlightTicks", "field_92017_k", "r"});
+			}
 			try {
 				
 					toolTipTime = field_remainingHighlightTicks.getInt(Minecraft.getMinecraft().ingameGUI);
@@ -400,8 +413,9 @@ public class ClientEvents {
 		if(ASMConfig.logPlayerDeathLocations && event.phase == Phase.END) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if(player != null) {
-				if(player.deathTime == 1)
+				if(player.deathTime == 1) {
 					PlayerDeathLogger.logDeath(player);
+				}
 			}
 			
 		}
@@ -449,8 +463,9 @@ public class ClientEvents {
 			sendKeyBindTip = false;
 		}
 		
-		if(MeTweaks.lotr && GuiUnitCountsOverlay.unitcountsEnabled)
+		if(MeTweaks.lotr && GuiUnitCountsOverlay.unitcountsEnabled) {
 			GuiUnitCountsOverlay.render(event.resolution);
+		}
 		
 		
 		if(stateTime > 0) {
@@ -488,8 +503,12 @@ public class ClientEvents {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(left, top, 0);
 			
-			if(translateStateOn == null) translateStateOn = StatCollector.translateToLocal("options.on");
-			if(translateStateOff == null) translateStateOff = StatCollector.translateToLocal("options.off");
+			if(translateStateOn == null) {
+				translateStateOn = StatCollector.translateToLocal("options.on");
+			}
+			if(translateStateOff == null) {
+				translateStateOff = StatCollector.translateToLocal("options.off");
+			}
 			
 			
 			String value = stateEnabled ? translateStateOn : translateStateOff; // "ON" : "OFF";
@@ -527,10 +546,11 @@ public class ClientEvents {
 			
 			// value background
 			if(useStateValue) {
-				if(stateEnabled)
+				if(stateEnabled) {
 					tessellator.setColorRGBA(11, 105, 0, alpha);
-				else
+				} else {
 					tessellator.setColorRGBA(41, 41, 41, alpha);
+				}
 				
 				tessellator.addVertex(-totalHalf + lenState + padding, -padding, 0);
 				tessellator.addVertex(-totalHalf + lenState + padding, height + padding, 0);
@@ -540,16 +560,18 @@ public class ClientEvents {
 			}
 			tessellator.draw();
 			
-			if(alpha < 10)
+			if(alpha < 10) {
 				alpha = 10;
+			}
 			
 			int color = 0xffffff + (alpha << 24);
 			//int color = 0x00ffffff & -alpha;
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
 			mc.fontRenderer.drawString(state, -totalHalf, 0, color);
-			if(useStateValue)
+			if(useStateValue) {
 				mc.fontRenderer.drawString(value, -totalHalf + lenState + padding + padding, 0, color);
+			}
 			GL11.glPopMatrix();
 		}
 	}
@@ -558,8 +580,9 @@ public class ClientEvents {
 	
 	@SubscribeEvent
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
-		if(MeTweaks.lotr)
+		if(MeTweaks.lotr) {
 			GuardEvents.handleRenderWorldLast(event);
+		}
 		
 		if(sendVerticalStateJoin) {
 			sendVerticalStateJoin = false;
@@ -567,8 +590,9 @@ public class ClientEvents {
 				VerticalSlab.setVerticalMode(Minecraft.getMinecraft().thePlayer, VerticalSlab.clientVertical);
 				
 				if(!Minecraft.getMinecraft().isSingleplayer()) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						FMLLog.getLogger().info("send status to server join: vertical="+VerticalSlab.clientVertical);
+					}
 					NetworkHandler.networkWrapper.sendToServer(new SyncVerticalModePacket(VerticalSlab.clientVertical));
 				}
 			}
@@ -577,8 +601,9 @@ public class ClientEvents {
 				ThrowableSpearState.setThrowableMode(Minecraft.getMinecraft().thePlayer, false);
 				
 				if(!Minecraft.getMinecraft().isSingleplayer()) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						FMLLog.getLogger().info("send throwablespear status to server on join");
+					}
 					NetworkHandler.networkWrapper.sendToServer(new SyncThrowableSpearPacket(false));
 				}
 			}
@@ -587,8 +612,9 @@ public class ClientEvents {
 				UnitMonitor.setUnitTrackingMode(Minecraft.getMinecraft().thePlayer, UnitMonitor.clientUnitTracking);
 				
 				if(!Minecraft.getMinecraft().isSingleplayer()) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						FMLLog.getLogger().info("send status to server join: unittracking="+UnitMonitor.clientUnitTracking);
+					}
 					NetworkHandler.networkWrapper.sendToServer(new SyncUnitTrackingModePacket(UnitMonitor.clientUnitTracking));
 				}
 			}
@@ -611,8 +637,9 @@ public class ClientEvents {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if(event.modID.equals(MeTweaks.MODID)) {
 			MeTweaksConfig.load(); 
-			if(MeTweaksConfig.debug >= 1)
+			if(MeTweaksConfig.debug >= 1) {
 				FMLLog.getLogger().info(MeTweaks.MODNAME + " config changed");
+			}
 		}
 	}
 	

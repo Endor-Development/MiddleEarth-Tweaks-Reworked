@@ -19,8 +19,9 @@ public class PreLoad {
 		
 	// PRE MENU
 		if(lotr) {
-			if(MeTweaksConfig.fixMountsRunningAway)
+			if(MeTweaksConfig.fixMountsRunningAway) {
 				c = metweaks.features.PlayerRidingTracker.class;
+			}
 			// transformer
 			if(ASMConfig.conquestDecay) {
 				c = lotr.common.LOTRLevelData.class;
@@ -50,12 +51,15 @@ public class PreLoad {
 			}
 			
 			
-				if(ASMConfig.conquestDecay)
+				if(ASMConfig.conquestDecay) {
 					c = metweaks.command.CommandConquestDecay.class;
-				if(ASMConfig.conquestClearCommand)
+				}
+				if(ASMConfig.conquestClearCommand) {
 					c = metweaks.command.CommandConquestClear.class;
-				if(MeTweaksConfig.toggleGuardModeHorn)
+				}
+				if(MeTweaksConfig.toggleGuardModeHorn) {
 					c = metweaks.command.CommandGuardModeHorn.class;
+				}
 				
 				if(ASMConfig.lotrEventControl) {
 					c = metweaks.command.CommandBanditChance.class;
@@ -70,16 +74,20 @@ public class PreLoad {
 			c = metweaks.command.CommandEntitySelector.class;
 			c = metweaks.command.CommandEntitySelector.Selector.class;
 			
-			if(ASMConfig.entityKillCommand)
+			if(ASMConfig.entityKillCommand) {
 				c = metweaks.command.CommandEntityKill.class;
-			if(ASMConfig.entityTpCommand)
+			}
+			if(ASMConfig.entityTpCommand) {
 				c = metweaks.command.CommandEntityTp.class;
-			if(ASMConfig.entityEffectCommand)
+			}
+			if(ASMConfig.entityEffectCommand) {
 				c = metweaks.command.CommandEntityEffect.class;
+			}
 		}
 		
-		if(ASMConfig.entityStackCommand)
+		if(ASMConfig.entityStackCommand) {
 			c = metweaks.command.CommandEntityStack.class;
+		}
 		
 		if(ASMConfig.giveManyCommand) {
 			c = metweaks.command.CommandGiveMany.class;
@@ -93,15 +101,16 @@ public class PreLoad {
 			c = metweaks.command.CommandExplosionPhysics.class;
 			//if(ExplosionPhysicsSettings.fastMoveImpl)
 				c = metweaks.physics.FastEntityMovement.class;
-			if(lotr)
-			try {
-				// anonymous inner classes
-				c = Class.forName("lotr.common.LOTRBannerProtection$1"); // anyBanner()
-				c = Class.forName("lotr.common.LOTRBannerProtection$5"); // forTNT()
-				c = Class.forName("lotr.common.LOTRBannerProtection$7"); // forThrown()
-			}
-			catch(Exception e) {
-				
+			if(lotr) {
+				try {
+					// anonymous inner classes
+					c = Class.forName("lotr.common.LOTRBannerProtection$1"); // anyBanner()
+					c = Class.forName("lotr.common.LOTRBannerProtection$5"); // forTNT()
+					c = Class.forName("lotr.common.LOTRBannerProtection$7"); // forThrown()
+				}
+				catch(Exception e) {
+					
+				}
 			}
 			
 		}
@@ -121,7 +130,7 @@ public class PreLoad {
 				c = metweaks.farview.ChunkIterator.class;
 				c = metweaks.farview.ChunkIteratorFC.class;
 				c = metweaks.farview.ChunkIteratorMET.class;
-				c = metweaks.farview.ChunkIteratorFastUtil.class;
+				c = metweaks.farview.ChunkIteratorFastUtil.class; 
 				c = metweaks.farview.METLongHashSet.class;
 				c = metweaks.farview.METLongHashSet.KeyNode.class;
 				c = metweaks.farview.FastUtilLongHashMap.class;
@@ -132,10 +141,12 @@ public class PreLoad {
 		
 		if(lotr) {
 			
-			if(MeTweaksConfig.unitTracking)
+			if(MeTweaksConfig.unitTracking) {
 				c = metweaks.features.UnitMonitor.class;
-			if(ASMConfig.aiRangedImprovements || (ASMConfig.guardsWanderRange && ASMConfig.guardsAdvancedSettings))
+			}
+			if(ASMConfig.aiRangedImprovements || (ASMConfig.guardsWanderRange && ASMConfig.guardsAdvancedSettings)) {
 				c = metweaks.guards.NpcReflectionAccess.class;
+			}
 			if(ASMConfig.guardsEquipRanged || ASMConfig.aiRangedImprovements) {
 				c = lotr.common.entity.ai.LOTREntityAIRangedAttack.class; // seemingly only if server
 			}
@@ -205,26 +216,34 @@ public class PreLoad {
 			
 		}
 		
-		if(MeTweaksConfig.alwaysSetBedSpawn || (lotr && MeTweaksConfig.checkBedUnsafe))
+		if(MeTweaksConfig.alwaysSetBedSpawn || (lotr && MeTweaksConfig.checkBedUnsafe)) {
 			c = metweaks.features.SleepHandler.class;
+		}
 		
 		
 		
 		// transformer
-		if(ASMConfig.syncedconfig)
+		if(ASMConfig.syncedconfig) {
 			c = cpw.mods.fml.common.network.handshake.FMLHandshakeMessage.ModIdData.class;
-		if(lotr && (MeTweaksConfig.toggleGuardModeHorn || ASMConfig.guardsWanderRange)) 
+		}
+		if(lotr && (MeTweaksConfig.toggleGuardModeHorn || ASMConfig.guardsWanderRange)) {
 			c = metweaks.guards.HiredInfoAccess.class;
-		if(lotr && client && ASMConfig.lotrHudPositions)
+		}
+		if(lotr && client && ASMConfig.lotrHudPositions) {
 			c = lotr.client.model.LOTRModelCompass.class;
-		if(lotr && ASMConfig.projectilePatches)
+		}
+		if(lotr && ASMConfig.projectilePatches) {
 			c = net.minecraft.entity.EntityTrackerEntry.class;
-		if(lotr && (ASMConfig.hiredsConquerForTheirFaction || ASMConfig.moreEvents)) 
+		}
+		if(lotr && (ASMConfig.hiredsConquerForTheirFaction || ASMConfig.moreEvents)) {
 			c = lotr.common.LOTRPlayerData.class;
-		if(lotr && ASMConfig.fixServerJoinFreeze)
+		}
+		if(lotr && ASMConfig.fixServerJoinFreeze) {
 			c = lotr.common.world.map.LOTRCustomWaypoint.class;
-		if(lotr && ASMConfig.bannerProtectionPatches)
+		}
+		if(lotr && ASMConfig.bannerProtectionPatches) {
 			c = lotr.common.LOTRBannerProtection.FilterForPlayer.class;
+		}
 		if(client && ASMConfig.explosionPhysics) {
 			c = net.minecraft.client.network.NetHandlerPlayClient.class;
 		}

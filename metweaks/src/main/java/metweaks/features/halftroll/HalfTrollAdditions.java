@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRItems;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.animal.LOTREntityRhino;
 import lotr.common.entity.npc.LOTREntityHalfTroll;
@@ -54,9 +54,9 @@ public class HalfTrollAdditions {
 				new LOTRUnitTradeEntry(LOTREntityHalfTrollWarrior.class, 50, 100.0F),
 				new LOTRUnitTradeEntry(LOTREntityHalfTrollThrower.class, 60, 150.0F).setPledgeType(LOTRUnitTradeEntry.PledgeType.FACTION),
 				new LOTRUnitTradeEntry(LOTREntityHalfTrollWarrior.class, LOTREntityRhino.class, "HalfTrollWarrior_Rhino", 70, 200.0F)
-					.setMountArmor(LOTRMod.rhinoArmorHalfTroll, 0.5F), 
+					.setMountArmor(LOTRItems.rhinoArmorHalfTroll, 0.5F), 
 				new LOTRUnitTradeEntry(LOTREntityHalfTrollThrower.class, LOTREntityRhino.class, "HalfTrollStoneThrower_Rhino", 80, 250.0F)
-					.setMountArmor(LOTRMod.rhinoArmorHalfTroll, 0.5F).setPledgeType(LOTRUnitTradeEntry.PledgeType.FACTION), 
+					.setMountArmor(LOTRItems.rhinoArmorHalfTroll, 0.5F).setPledgeType(LOTRUnitTradeEntry.PledgeType.FACTION), 
 				new LOTRUnitTradeEntry(LOTREntityHalfTrollBannerBearer.class, 70, 150.0F) 
 		 });
 		  

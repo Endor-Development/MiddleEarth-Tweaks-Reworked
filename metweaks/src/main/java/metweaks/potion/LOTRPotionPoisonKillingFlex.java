@@ -4,8 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lotr.common.LOTRMod;
 import lotr.common.content.LOTRDamage;
-import lotr.common.item.LOTRPoisonedDrinks;
 import lotr.common.item.LOTRPotionPoisonKilling;
+import lotr.common.item.LOTRPotions;
 import metweaks.MeTweaks;
 import metweaks.MeTweaksConfig;
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,7 @@ public class LOTRPotionPoisonKillingFlex extends Potion{
 		setPotionName("potion.lotr.drinkPoison");
 		setIconIndex(0, 0);
 		setEffectiveness(Potion.poison.getEffectiveness());
-		LOTRPoisonedDrinks.killingPoison = this;
+		LOTRPotions.killingPoison = this;
 
 	}
 
@@ -53,13 +53,14 @@ public class LOTRPotionPoisonKillingFlex extends Potion{
 			if(oldid >= 0 && oldid <= 31) {
 				Potion potion = Potion.potionTypes[oldid];
 				if(potion != null) {
-					if(MeTweaksConfig.debug >= 2)
+					if(MeTweaksConfig.debug >= 2) {
 						if(potion instanceof LOTRPotionPoisonKillingFlex || potion instanceof LOTRPotionPoisonKilling) {
 							System.out.println("potionID " + potion.getName() + " changed from "+ oldid + " to "+newid);
 						}
 						else {
 							System.out.println("potion " + potion.getName() + " of id "+ oldid + " removed");
 						}
+					}
 					Potion.potionTypes[oldid] = null;
 				}
 				

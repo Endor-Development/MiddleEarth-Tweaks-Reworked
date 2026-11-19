@@ -10,7 +10,7 @@ import java.util.Set;
 
 import cpw.mods.fml.client.config.IConfigElement;
 import lotr.common.entity.npc.LOTRNPCMount;
-import lotr.common.item.LOTRPoisonedDrinks;
+import lotr.common.item.LOTRPotions;
 import lotr.common.quest.LOTRMiniQuest;
 import metweaks.features.ModifierHandler;
 import metweaks.features.ModifierHandler.MountData;
@@ -105,8 +105,8 @@ public class MeTweaksConfig {
 	
 	public static void checkPotionID() {
 		
-		if(MeTweaks.lotr && killPotionID != LOTRPoisonedDrinks.killingPoison.id) {
-			LOTRPotionPoisonKillingFlex.changePotionID(LOTRPoisonedDrinks.killingPoison.id, killPotionID);
+		if(MeTweaks.lotr && killPotionID != LOTRPotions.killingPoison.id) {
+			LOTRPotionPoisonKillingFlex.changePotionID(LOTRPotions.killingPoison.id, killPotionID);
 			
 		}
 	}
@@ -116,8 +116,9 @@ public class MeTweaksConfig {
 	private static String addCategory(String name, String desc) {
 		ConfigCategory category = config.getCategory(name);
 		category.setLanguageKey(MeTweaks.MODID + ".config." + name);
-		if(desc != null)
+		if(desc != null) {
 			category.setComment(desc);
+		}
 		
 		categories.add(category);
 		return name;
@@ -195,8 +196,9 @@ public class MeTweaksConfig {
 						// init mountdata
 						temp.name = data.name;
 						data = temp;
-						if(speed.length > 2) // add subtypes if more than 2 values
+						if(speed.length > 2) { // add subtypes if more than 2 values
 							data.subtypes = new MountData[(speed.length >> 1) - 1];
+						}
 					}
 
 					i+=2;
@@ -231,12 +233,15 @@ public class MeTweaksConfig {
 		if(configversion < latestversion) {
 			ConfigCompartiblity.makeBackUp();
 			
-			if(configversion < 2)
+			if(configversion < 2) {
 				ConfigCompartiblity.handleOldConfig_LT2();
-			if(configversion < 3)
+			}
+			if(configversion < 3) {
 				ConfigCompartiblity.handleOldConfig_LT3();
-			if(configversion < 4)
+			}
+			if(configversion < 4) {
 				ConfigCompartiblity.handleOldConfig_LT4();
+			}
 			verProperty.set(latestversion);
 		}
 		
@@ -252,8 +257,9 @@ public class MeTweaksConfig {
 				.getInt(), 
 				0, 31);
 		
-		if(!startup)
+		if(!startup) {
 			checkPotionID();
+		}
 		
 
 		
@@ -307,8 +313,9 @@ public class MeTweaksConfig {
 			ThrowableSpearState.loadConfig();
 		}
 		
-		if(MeTweaks.lotr)
+		if(MeTweaks.lotr) {
 			LOTRMiniQuest.MAX_MINIQUESTS_PER_FACTION = config.get(MISC, "Max Miniquests Per Faction", LOTRMiniQuest.MAX_MINIQUESTS_PER_FACTION).getInt();
+		}
 		
 		if(modifySpeed) {
 			String MOUNTSPEEDS = CATEGORY_MOUNTSPEEDS;
@@ -349,15 +356,18 @@ public class MeTweaksConfig {
 		
 		
 		
-		if(MeTweaks.lotr && ASMConfig.guardsWanderRange && ASMConfig.guardsAdvancedSettings)
+		if(MeTweaks.lotr && ASMConfig.guardsWanderRange && ASMConfig.guardsAdvancedSettings) {
 			GuardsAdvSettingsConfig.loadConfig();
+		}
 		if(ASMConfig.explosionPhysics) {
 			ExplosionPhysicsSettings.loadConfig();
 		}
 		
 		MeTweaks.proxy.loadClientConfig();
 		
-		if(config.hasChanged()) config.save(); 
+		if(config.hasChanged()) {
+			config.save();
+		} 
 	}
 	
 	@SuppressWarnings("rawtypes")

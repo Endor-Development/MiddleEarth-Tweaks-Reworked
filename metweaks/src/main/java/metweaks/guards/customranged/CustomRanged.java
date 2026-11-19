@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lotr.client.gui.LOTRGuiHiredWarriorInventory;
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRItems;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentHelper;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
@@ -92,15 +92,18 @@ public class CustomRanged {
 	
 	public static boolean allowCategory(Item item, Category category) {
 		int i = ASMConfig.guardsLockCategoryRanged;
-		if(i == 0) return true;
+		if(i == 0) {
+			return true;
+		}
 		Category current = Category.getCategory(item);
 		
 		return i == 1 ? current == category : current.ordinal() <= category.ordinal();
 	}
 	
 	public static void updateHeldItem(LOTREntityNPC theNPC) {
-		if(!skipHeldItemUpdate && !theNPC.npcItemsInv.getIsEating())
-			theNPC.refreshCurrentAttackMode(); 
+		if(!skipHeldItemUpdate && !theNPC.npcItemsInv.getIsEating()) {
+			theNPC.refreshCurrentAttackMode();
+		} 
 		
 	}
 	
@@ -210,8 +213,9 @@ public class CustomRanged {
 	public static void drawGuiContainerBackgroundLayer(LOTRContainerHiredWarriorInventory containerInv, LOTRGuiHiredWarriorInventory gui, int guiLeft, int guiTop) {
 		//Slot slotMelee = containerInv.getSlotFromInventory(containerInv.proxyInv, 4);
 	    Slot slotRanged = containerInv.getSlotFromInventory(containerInv.proxyInv, LOTRInventoryHiredReplacedItems.RANGED);
-	    if(slotRanged != null)
-	    	gui.drawTexturedModalRect(guiLeft + slotRanged.xDisplayPosition - 1, guiTop + slotRanged.yDisplayPosition - 1, 49, 47, 18, 18);
+	    if(slotRanged != null) {
+			gui.drawTexturedModalRect(guiLeft + slotRanged.xDisplayPosition - 1, guiTop + slotRanged.yDisplayPosition - 1, 49, 47, 18, 18);
+		}
 	}
 	
 	public static float globalPenaltyRanged = Math.max(1F, ASMConfig.guardsAttackDelayFactorRanged * 0.01F);
@@ -233,24 +237,25 @@ public class CustomRanged {
 	*/
 	
 	public static float getFactor(float weight, boolean hired) {
-		if(gHiredsDamageFactorProjectiles != 1F && (hired || !ASMConfig.projectileFlagsHiredsOnly))
+		if(gHiredsDamageFactorProjectiles != 1F && (hired || !ASMConfig.projectileFlagsHiredsOnly)) {
 			return 1F + (gHiredsDamageFactorProjectiles - 1F) * weight;
+		}
 		return 1F;
 	}
 	
 	public static enum Category {
-		SLING(20, 40, 12F, false, 		4F), // LOTRMod.sling
+		SLING(20, 40, 12F, false, 		4F), // LOTRItems.sling
 		PLATE(15, 25, 12F, true, 		4F),
 		BOW(30, 50, 16F, false, 		2F), // instanceof ItemBow, after checking rest for negative
-		BLOWGUN(10, 30, 16F, false, 	2F, 1.1F), // LOTRMod.blowgun
+		BLOWGUN(10, 30, 16F, false, 	2F, 1.1F), // LOTRItems.blowgun
 		AXE(40, 50, 12F, true, 			1F), // .getClass() == LOTRItemThrowingAxe.class
 		CROSSBOW(30, 50, 16F, false, 	2F, 1.1F), // instanceof LOTRItemCrossbow
 		SPEAR(50, 80, 16F, true, 		0.25F),
-		FIREPOT(20, 30, 16F, true, 		8F, 2.7F), // LOTRMod.rhunFirePot
-		TERMITE(60, 100, 16F, true, 	8F); // LOTRMod.termite
+		FIREPOT(20, 30, 16F, true, 		8F, 2.7F), // LOTRItems.rhunFirePot
+		TERMITE(60, 100, 16F, true, 	8F); // LOTRItems.termite
 		
 		
-		// stack.getItem() == LOTRMod.termite || stack.getItem() == LOTRMod.rhunFirePot || stack.getItem() == LOTRMod.sling;
+		// stack.getItem() == LOTRItems.termite || stack.getItem() == LOTRItems.rhunFirePot || stack.getItem() == LOTRItems.sling;
 		
 		
 		boolean damageable;
@@ -289,28 +294,29 @@ public class CustomRanged {
 			if(item instanceof LOTRItemCrossbow) {
 				return CROSSBOW;
 			}
-			else if(item == LOTRMod.sling) {
+			else if(item == LOTRItems.sling) {
 				return SLING;
 			}
-			else if(item == LOTRMod.tauredainBlowgun) {
+			else if(item == LOTRItems.tauredainBlowgun) {
 				return BLOWGUN;
 			}
-			else if(item == LOTRMod.termite) {
+			else if(item == LOTRItems.termite) {
 				return TERMITE;
 			}
-			else if(item == LOTRMod.rhunFirePot) {
+			else if(item == LOTRItems.rhunFirePot) {
 				return FIREPOT;
 			}
 			else if(item.getClass() == LOTRItemThrowingAxe.class) {
 				return AXE;
 			}
-			else if(item.getClass() == LOTRItemPlate.class && item != LOTRMod.woodPlate) {
+			else if(item.getClass() == LOTRItemPlate.class && item != LOTRItems.woodPlate) {
 				return PLATE;
 			}
-			else if(item.getClass() == LOTRItemSpear.class && item != LOTRMod.spearStone) {
+			else if(item.getClass() == LOTRItemSpear.class && item != LOTRItems.spearStone) {
 				return SPEAR;
+			} else {
+				return BOW;
 			}
-			else return BOW;
 		}
 		
 		// dont see anything else as bow, used for launching
@@ -404,7 +410,9 @@ public class CustomRanged {
 				Entity entity = null;
 				for(WorldServer world : MinecraftServer.getServer().worldServers) {
 					entity = world.getEntityByID(key);
-					if(entity != null) break;
+					if(entity != null) {
+						break;
+					}
 				}
 				
 				if(entity == null || entity.isDead) {
@@ -458,7 +466,7 @@ public class CustomRanged {
 					
 					ddr.factor_timeMin = (float) timeMin / (float) category.attackTimeMin;
 					ddr.factor_timeMax = (float) timeMax / (float) category.attackTimeMax;
-					ddr.factor_range = (float) range / (float) category.attackRange;
+					ddr.factor_range = range / category.attackRange;
 					ddrMap.put(id, ddr);
 					return ddr;
 				}
@@ -512,7 +520,7 @@ public class CustomRanged {
 				ExtraHiredData ext = ExtraHiredData.load(npc);
 				int delta = ext.ammoRange - ext.ammoRangeDef;
 				
-				ext.ammoRangeDef = (byte) newDefAmmo;
+				ext.ammoRangeDef = newDefAmmo;
 				ext.setAmmoRangeVerify(newDefAmmo + delta, npc);
 				
 				if(updateMoveRange) {
@@ -603,8 +611,9 @@ public class CustomRanged {
 					
 					if(allow) {
 						// we only need it for untouched npcs
-						if(!customized && ASMConfig.randomEnchRangedNpcWeapons)
+						if(!customized && ASMConfig.randomEnchRangedNpcWeapons) {
 							handleRandomEnch(npc, stack);
+						}
 						
 						
 						
@@ -636,11 +645,13 @@ public class CustomRanged {
 							case SPEAR:
 								LOTREntitySpear spear = new LOTREntitySpear(world, npc, target, stack, 1.07F, accuracy);
 								int fireAspect2 = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) + LOTREnchantmentHelper.calcFireAspect(stack);
-							    if (fireAspect2 > 0)
-							      spear.setFire(100); 
+							    if (fireAspect2 > 0) {
+									spear.setFire(100);
+								} 
 							    for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {
-							      if (ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench))
-							        LOTREnchantmentHelper.setProjectileEnchantment(spear, ench); 
+							      if (ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench)) {
+									LOTREnchantmentHelper.setProjectileEnchantment(spear, ench);
+								  } 
 							    } 
 						        npc.playSound("random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F));
 						        setupProjectileVelocity(spear, target, 1.6F * getFactor(0.875F, hired), 0.99F, 0.05F, accuracy);
@@ -650,11 +661,13 @@ public class CustomRanged {
 							case AXE:
 								LOTREntityThrowingAxe axe = new LOTREntityThrowingAxe(world, npc, target, stack, 1.0F, accuracy);
 								int fireAspect = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) + LOTREnchantmentHelper.calcFireAspect(stack);
-							    if(fireAspect > 0)
-							    	axe.setFire(100); 
+							    if(fireAspect > 0) {
+									axe.setFire(100);
+								} 
 							    for(LOTREnchantment ench : LOTREnchantment.allEnchantments) {
-							    	if(ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench))
-							    		LOTREnchantmentHelper.setProjectileEnchantment(axe, ench); 
+							    	if(ench.applyToProjectile() && LOTREnchantmentHelper.hasEnchant(stack, ench)) {
+										LOTREnchantmentHelper.setProjectileEnchantment(axe, ench);
+									} 
 							    }
 								
 								npc.playSound("random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
@@ -666,7 +679,7 @@ public class CustomRanged {
 							case BLOWGUN:
 								
 							    speed = LOTRItemBlowgun.getBlowgunLaunchSpeedFactor(stack);
-							    LOTREntityDart dart = ((LOTRItemDart) LOTRMod.tauredainDart).createDart(world, npc, target, new ItemStack(rand.nextInt(npc instanceof LOTREntityTauredainBlowgunner ? 100 : 200) <= ASMConfig.tauredainPoisonDartChance ? LOTRMod.tauredainDartPoisoned : LOTRMod.tauredainDart), 1, accuracy);
+							    LOTREntityDart dart = ((LOTRItemDart) LOTRItems.tauredainDart).createDart(world, npc, target, new ItemStack(rand.nextInt(npc instanceof LOTREntityTauredainBlowgunner ? 100 : 200) <= ASMConfig.tauredainPoisonDartChance ? LOTRItems.tauredainDartPoisoned : LOTRItems.tauredainDart), 1, accuracy);
 							   
 							    LOTRItemBlowgun.applyBlowgunModifiers(dart, stack); 
 							    npc.playSound("lotr:item.dart", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 0.5F);
@@ -680,7 +693,7 @@ public class CustomRanged {
 								
 							    speed = LOTRItemCrossbow.getCrossbowLaunchSpeedFactor(stack);
 							    poison = rand.nextFloat() < getPoisonedArrowChance(npc);
-							    ItemStack boltitem = new ItemStack(poison ? LOTRMod.crossbowBoltPoisoned : LOTRMod.crossbowBolt);
+							    ItemStack boltitem = new ItemStack(poison ? LOTRItems.crossbowBoltPoisoned : LOTRItems.crossbowBolt);
 							    LOTREntityCrossbowBolt bolt = new LOTREntityCrossbowBolt(world, npc, target, boltitem, 1, accuracy);
 							    
 							    LOTRItemCrossbow.applyCrossbowModifiers(bolt, stack); 
@@ -751,7 +764,9 @@ public class CustomRanged {
 					// 50 = 50% durability
 					// 1 = ~0.01 damage (random)
 		
-		if(ASMConfig.guardsEquipDurabilityMode == 0) return true;
+		if(ASMConfig.guardsEquipDurabilityMode == 0) {
+			return true;
+		}
 		
 		if(ASMConfig.guardsEquipDurabilityMode != 1 && category == ddr.category) {
 			return true;

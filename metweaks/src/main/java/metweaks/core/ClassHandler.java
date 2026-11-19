@@ -20,7 +20,6 @@ import static metweaks.core.TCallsConquest.transformLOTRConquestGrid;
 import static metweaks.core.TCallsConquest.transformLOTRConquestZone;
 import static metweaks.core.TCallsConquest.transformLOTRLevelData;
 import static metweaks.core.TCallsConquest.transformLOTRPlayerData;
-import static metweaks.core.TCallsConquest.transformLOTRReflection;
 import static metweaks.core.TCallsGuards.transformEntityAITarget;
 import static metweaks.core.TCallsGuards.transformHiredInfoAccess;
 import static metweaks.core.TCallsGuards.transformLOTRGuiHiredWarrior;
@@ -98,7 +97,7 @@ public class ClassHandler {
 	public static final void callByIndex(ClassNode c, int i) {
 		switch(i) {
 			case 0: // lotr.common.LOTRReflection
-	    		transformLOTRReflection(c);									break;
+//	    		transformLOTRReflection(c);									break;
 	    	case 1: // lotr.common.world.spawning.LOTRBiomeSpawnList$FactionContainer
 	    		transformLOTRBiomeSpawnList$FactionContainer(c);			break;
 	    	case 2: // lotr.common.world.map.LOTRConquestGrid

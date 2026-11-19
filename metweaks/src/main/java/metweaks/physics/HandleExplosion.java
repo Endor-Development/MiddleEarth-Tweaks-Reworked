@@ -9,7 +9,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRBannerProtection.IFilter;
 import lotr.common.LOTRConfig;
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRBlocks;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.base.LOTREntityWargBombardier;
 import metweaks.MeTweaks;
@@ -52,9 +52,9 @@ public class HandleExplosion {
 			return true;
 		}
 		if(MeTweaks.lotr) {
-			if(block == LOTRMod.orcBomb // explosion chain
-			|| block == LOTRMod.rhunFireJar // explosion chain (instant)
-			|| block == LOTRMod.termiteMound // duplicate
+			if(block == LOTRBlocks.orcBomb // explosion chain
+			|| block == LOTRBlocks.rhunFireJar // explosion chain (instant)
+			|| block == LOTRBlocks.termiteMound // duplicate
 			) {
 				return true;
 			}
@@ -124,7 +124,9 @@ public class HandleExplosion {
 
 	
 	public static boolean canPlaySound(final World world) {
-		if(!ExplosionPhysicsSettings.playBlockSounds) return false;
+		if(!ExplosionPhysicsSettings.playBlockSounds) {
+			return false;
+		}
 		
 		if(nextFBCount < System.currentTimeMillis()) {
 			updateFBCount(world);
@@ -286,15 +288,18 @@ public class HandleExplosion {
     	}
 
     	// PASS 2: Setup Blocklist results
-    	if(holeDepthFactor < 1.0F)
-    		performHoleFactor(explosion, blocks, world);
+    	if(holeDepthFactor < 1.0F) {
+			performHoleFactor(explosion, blocks, world);
+		}
     	
     	// PASS 3: Send Explosion Packet
     	sendExplosionPacket(explosion, world, blocks);
     	 
     	
-    	if(!explosionPhysics) return;
-    	// PASS 4: Flying Blocks
+    	if(!explosionPhysics) {
+			return;
+			// PASS 4: Flying Blocks
+		}
     	
     	
     	countGS = 0;
@@ -358,8 +363,8 @@ public class HandleExplosion {
 				if(block == Blocks.grass) {
 					block = Blocks.dirt;
 				}
-				else if(MeTweaks.lotr && block == LOTRMod.mudGrass) {
-					block = LOTRMod.mud;
+				else if(MeTweaks.lotr && block == LOTRBlocks.mudGrass) {
+					block = LOTRBlocks.mud;
 				}
 				
 				PhysicsEntity falling = new PhysicsEntity(world, x + 0.5, y + 0.90625, z + 0.5, block, metadata);
@@ -400,8 +405,9 @@ public class HandleExplosion {
 			return false;
     	});
 
-    	if(MeTweaksConfig.debug > 0)
-    		FMLLog.getLogger().info("Blocks: " + all + " / " + filtered +" / "+ countGS+" / Perc "+percent);
+    	if(MeTweaksConfig.debug > 0) {
+			FMLLog.getLogger().info("Blocks: " + all + " / " + filtered +" / "+ countGS+" / Perc "+percent);
+		}
     	
 		
 	}

@@ -5,9 +5,10 @@ import java.util.Random;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import lotr.common.LOTRLevelData;
-import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
 import lotr.common.content.LOTRAchievement;
+import lotr.common.content.LOTRBlocks;
+import lotr.common.content.LOTRItems;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.ai.LOTREntityAIHiredRemainStill;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
@@ -38,7 +39,7 @@ public class HireableEnts {
 	public static LOTRAchievement hireEnt;
 	
 	public HireableEnts() {
-		hireEnt = new LOTRAchievement(Category.FANGORN, 5, new ItemStack(LOTRMod.sapling2, 1, 1), "hireEnt").setRequiresAlly(LOTRFaction.FANGORN);
+		hireEnt = new LOTRAchievement(LOTRAchievement.Category.FANGORN, 5, new ItemStack(LOTRBlocks.sapling2, 1, 1), "hireEnt").setRequiresAlly(LOTRFaction.FANGORN);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -54,7 +55,7 @@ public class HireableEnts {
 	public void onInteract(PlayerInteractEvent event) {
 		if(event.action == Action.RIGHT_CLICK_AIR) {
 			ItemStack stack = event.entityPlayer.getHeldItem();
-			if(stack != null && stack.getItem() == LOTRMod.entDraught && stack.getItemDamage() == 2 && lastHiringTime > System.currentTimeMillis()) { // gold
+			if(stack != null && stack.getItem() == LOTRItems.entDraught && stack.getItemDamage() == 2 && lastHiringTime > System.currentTimeMillis()) { // gold
 				event.setCanceled(true);
 			}
 		}
@@ -64,7 +65,7 @@ public class HireableEnts {
 	public void onEntityInteract(EntityInteractEvent event) {
 		if(event.target instanceof LOTREntityEnt) {
 			ItemStack stack = event.entityPlayer.getHeldItem();
-			if(stack != null && ((stack.getItem() == LOTRMod.entDraught && stack.getItemDamage() == 2) || stack.getItem() == Items.bowl)) { // gold
+			if(stack != null && ((stack.getItem() == LOTRItems.entDraught && stack.getItemDamage() == 2) || stack.getItem() == Items.bowl)) { // gold
 				if(attemptToHireEnt(event.entityPlayer, (LOTREntityEnt) event.target, stack)) {
 					event.setCanceled(true);
 				}
@@ -81,25 +82,30 @@ public class HireableEnts {
 	
 	public static boolean attemptToHireEnt(EntityPlayer player, LOTREntityEnt ent, ItemStack stack) {
 		if(ent.hiredNPCInfo.isActive || ent.hiredNPCInfo.getHiringPlayerUUID() != null) {
-			if(lastHiringID == ent.getEntityId() && lastHiringTime > System.currentTimeMillis())
+			if(lastHiringID == ent.getEntityId() && lastHiringTime > System.currentTimeMillis()) {
 				return true;
+			}
 			return false;
 		}
 		
-		if(stack.getItem() != LOTRMod.entDraught) return false;
+		if(stack.getItem() != LOTRItems.entDraught) {
+			return false;
+		}
 		
 		LOTRPlayerData playerData = LOTRLevelData.getData(player);
 		World world = player.worldObj;
 		
 		if(playerData.getAlignment(LOTRFaction.FANGORN) < 600.0F) {
-	    	if(!world.isRemote)
-	    		LOTRAlignmentValues.notifyAlignmentNotHighEnough(player, 600.0F, LOTRFaction.FANGORN); 
+	    	if(!world.isRemote) {
+				LOTRAlignmentValues.notifyAlignmentNotHighEnough(player, 600.0F, LOTRFaction.FANGORN);
+			} 
 	        return true;
 	    }
 		
 		if(playerData.getPledgeFaction() != LOTRFaction.FANGORN) {
-	    	if(!world.isRemote)
-	    		notifyPledgeRequired(player, LOTRFaction.FANGORN); 
+	    	if(!world.isRemote) {
+				notifyPledgeRequired(player, LOTRFaction.FANGORN);
+			} 
 	        return true;
 	    }
 		

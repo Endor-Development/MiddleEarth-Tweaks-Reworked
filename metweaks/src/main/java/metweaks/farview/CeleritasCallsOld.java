@@ -1,6 +1,7 @@
 package metweaks.farview;
 
-import me.jellysquid.mods.sodium.client.render.chunk.map.ChunkTrackerHolder;
+import org.embeddedt.embeddium.impl.render.chunk.map.ChunkTrackerHolder;
+
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.world.World;
 

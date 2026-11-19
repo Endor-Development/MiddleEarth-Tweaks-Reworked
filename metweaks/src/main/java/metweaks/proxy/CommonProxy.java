@@ -7,7 +7,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import lotr.common.LOTRMod;
+import lotr.common.content.LOTRItems;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHiredNPCInfo.Task;
 import lotr.common.entity.projectile.LOTREntityCrossbowBolt;
@@ -93,8 +93,9 @@ public class CommonProxy implements IGuiHandler {
 				new FastTravelHandler();
 			}
 			
-			if(MeTweaksConfig.killPotionID != 30)
+			if(MeTweaksConfig.killPotionID != 30) {
 				LOTRPotionPoisonKillingFlex.changePotionID(30, MeTweaksConfig.killPotionID);
+			}
 			
 			if(ASMConfig.halfTrollAdditions) {
 				HalfTrollAdditions.setup();
@@ -116,8 +117,9 @@ public class CommonProxy implements IGuiHandler {
 			
 
 		
-		if(MeTweaksConfig.barkBlocks || MeTweaksConfig.verticalSlabs || MeTweaksConfig.woolSlabs || MeTweaksConfig.woolStairs)
+		if(MeTweaksConfig.barkBlocks || MeTweaksConfig.verticalSlabs || MeTweaksConfig.woolSlabs || MeTweaksConfig.woolStairs) {
 			BlocksCore.setupBlocks();
+		}
 		
 		
 		
@@ -160,10 +162,10 @@ public class CommonProxy implements IGuiHandler {
 			int normal = ASMConfig.stewMaxStacksize;
 			Items.mushroom_stew.setMaxStackSize(normal);
 			if(MeTweaks.lotr) {
-				LOTRMod.rabbitStew.setMaxStackSize(Math.max(ASMConfig.stewMaxStacksize / 2, 1));
-				LOTRMod.torogStew.setMaxStackSize(Math.max(ASMConfig.stewMaxStacksize / 4, 1));
-				LOTRMod.melonSoup.setMaxStackSize(normal);
-				LOTRMod.leekSoup.setMaxStackSize(normal);
+				LOTRItems.rabbitStew.setMaxStackSize(Math.max(ASMConfig.stewMaxStacksize / 2, 1));
+				LOTRItems.torogStew.setMaxStackSize(Math.max(ASMConfig.stewMaxStacksize / 4, 1));
+				LOTRItems.melonSoup.setMaxStackSize(normal);
+				LOTRItems.leekSoup.setMaxStackSize(normal);
 			}
 		}
 		
@@ -202,8 +204,9 @@ public class CommonProxy implements IGuiHandler {
 		Entity entity = world.getEntityByID(id);
 	    if(entity instanceof LOTREntityNPC) {
 	        LOTREntityNPC npc = (LOTREntityNPC)entity;
-	        if(npc.hiredNPCInfo.isActive && npc.hiredNPCInfo.getHiringPlayer() == player && npc.hiredNPCInfo.getTask() == task)
-	          return npc; 
+	        if(npc.hiredNPCInfo.isActive && npc.hiredNPCInfo.getHiringPlayer() == player && npc.hiredNPCInfo.getTask() == task) {
+				return npc;
+			} 
 	      }
 		return null; 
 	}
@@ -212,11 +215,15 @@ public class CommonProxy implements IGuiHandler {
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int i, int j, int k) {
 		if(ID == GUI_ID_FARMER_INV_KEEP) {
 			LOTREntityNPC npc = getSafeHired(i, world, player, Task.FARMER);
-			if(npc != null) return new LOTRHiredFarmerInvKeep(player.inventory, npc); 
+			if(npc != null) {
+				return new LOTRHiredFarmerInvKeep(player.inventory, npc);
+			} 
 		}
 		else if(ID == GUI_ID_WARRIOR_INV_KEEP) {
 			LOTREntityNPC npc = getSafeHired(i, world, player, Task.WARRIOR);
-			if(npc != null) return new LOTRHiredWarriorInvKeep(player.inventory, npc); 
+			if(npc != null) {
+				return new LOTRHiredWarriorInvKeep(player.inventory, npc);
+			} 
 		} 
 		return null;
 	}
@@ -225,11 +232,15 @@ public class CommonProxy implements IGuiHandler {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int i, int j, int k) {
 		if(ID == GUI_ID_FARMER_INV_KEEP) {
 			LOTREntityNPC npc = getSafeHired(i, world, player, Task.FARMER);
-			if(npc != null) return new LOTRGuiHiredFarmerInvKeep(player.inventory, npc); 
+			if(npc != null) {
+				return new LOTRGuiHiredFarmerInvKeep(player.inventory, npc);
+			} 
 		}
 		else if(ID == GUI_ID_WARRIOR_INV_KEEP) {
 			LOTREntityNPC npc = getSafeHired(i, world, player, Task.WARRIOR);
-			if(npc != null) return new LOTRGuiHiredWarriorInvKeep(player.inventory, npc); 
+			if(npc != null) {
+				return new LOTRGuiHiredWarriorInvKeep(player.inventory, npc);
+			} 
 		}
 		return null; 
 	}
