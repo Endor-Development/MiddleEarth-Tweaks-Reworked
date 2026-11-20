@@ -100,7 +100,6 @@ dependencies {
   api(rfg.deobf("curse.maven:moreplayermodels-plus-661492:5555794"))
   api(rfg.deobf("curse.maven:et-futurum-requiem-441392:5873837"))
   api(rfg.deobf("curse.maven:angelica-988067:9601557"))
-  //api(rfg.deobf("curse.maven:unimixins-826970:8153136"))
   api(rfg.deobf(project.files("libs/LOTR-Reworked-Legacy-1.3.9.jar", "libs/gtnhlib-0.12.9.jar", "libs/unimixins-826970-8153136-deobf.jar")))
   implementation("it.unimi.dsi:fastutil:8.+")
 }
